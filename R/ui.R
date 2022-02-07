@@ -15,7 +15,7 @@ ui <- fluidPage(
              selected = "home", 
              collapsible = TRUE, 
              inverse = TRUE, 
-             theme = shinytheme("spacelab"),
+             theme = shinytheme("simplex"),
              tabPanel(icon("home"),
                       fluidRow(column(tags$img(src="my_image.jpg",width="200px",height="260px"),width=2),
                                column(
