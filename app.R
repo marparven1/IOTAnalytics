@@ -7,11 +7,12 @@ library(shinyjs)
 library(rintrojs)
 library(markdown)
 
+
+
 load(file="data/DF_Energia_GMinutos.RData")
 load(file="data/DF_Energia_GHoras.RData")
 load(file="data/DF_Energia_GDiaria.RData")
-myfile <-  file.path("data", "DF_Energia_GMensual.RData") 
-load(myfile)
+load(file="data/DF_Energia_GMensual.RData")
 
 
 source("R/ui.R")

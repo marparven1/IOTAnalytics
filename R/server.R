@@ -8,6 +8,8 @@ library(RcmdrMisc)
 library(lmtest)
 
 
+
+
  
 # Define server logic required to draw a histogram ----
 server <- function(input, output) {
@@ -98,5 +100,6 @@ server <- function(input, output) {
     colnames = colnames(DatosCompletos)
     ))
   
+ 
   
 }
