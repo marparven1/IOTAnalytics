@@ -6,6 +6,8 @@ library(ggplot2)
 library(shinyjs)
 library(rintrojs)
 library(markdown)
+library(DT)
+library(tidyr)
 
 
 
