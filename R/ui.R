@@ -12,14 +12,8 @@ ui <- fluidPage(
              selected = icon("home"), collapsible = TRUE, fluid = TRUE, 
            theme = shinytheme("simplex"),
              tabPanel( icon("home"),
-                      
-                       fluidRow(column(width=2,tags$img(src="logo.jpeg", width='100px',height='100px'),align="center"),
-                                
-                                column(
-                                  
-                                  p("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."),
-                                  
-                                  width=8,style="background-color:#BFF7BB;border-radius: 10px"))
+                       includeHTML("Untitled.Rhtml"),
+                       HTML('<footer><p><a href="https://iot-analytics.com/" target="_blank">IOT Analitycs</a></p></footer>')
              ),
            navbarMenu(
              "Datos",
@@ -82,52 +76,20 @@ ui <- fluidPage(
                         tabPanel("Gráficas 1",
                                  div(
                                    h1("Gráficas del consumo semanal"),
-                                   p(  ),
-                                   p()
-                                   
-                                   
-                                 ),
-                                 sidebarLayout(
-                                   sidebarPanel(
-                                     radioButtons("plotType", "Plot type",
-                                                  c("Scatter"="p", "Line"="l")
-                                     )
-                                   ),
-                                   mainPanel(
-                                     plotOutput("plot")
-                                   )
+                                   div( 
+
+                                     img( src="Consumo_SemanalMedioSemana52_Comparacion_09_06-08.png", width="50%", alt="Semanalmedio52"),
+                                     br(),
+                                     img( src="Consumo_SemanalMedio_Comp_09_06-08.png", width="50%", alt="Semanal medio")
+                                     ),
                                  )
                                  ),
-                        tabPanel("Porcentaje de energía" )
+                        tabPanel("Porcentaje de energía"
                       )
                       
                       )
   )
-)
-  #### ####
-  
-  # Sidebar layout with input and output definitions ----
- ##  sidebarLayout(
- ##    
- ##    # Sidebar panel for inputs ----
- ##    sidebarPanel(
- ##      
- ##      # Input: Slider for the number of bins ----
- ##      sliderInput(inputId = "bins",
- ##                  label = "Number of bins:",
- ##                  min = 1,
- ##                  max = 50,
- ##                  value = 10)
- ##      
- ##    ),
- ##    
- ##    # Main panel for displaying outputs ----
- ##    mainPanel(
- ##      
- ##      # Output: Histogram ----
- ##      plotOutput(outputId = "distPlot")
- ##      
- ##    )
- ##  )
+))
+
   
 
