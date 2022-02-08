@@ -1,5 +1,6 @@
 library(shiny)
 library(shinythemes)
+library(plotly)
 
 
 
@@ -11,7 +12,7 @@ ui <- fluidPage(
   navbarPage("IOT Analitycs", 
              selected = icon("home"), collapsible = TRUE, fluid = TRUE, 
            theme = shinytheme("simplex"),
-             tabPanel( icon("home"),
+           tabPanel( icon("home"),
                        includeHTML("Untitled.Rhtml"),
                        HTML('<footer><p><a href="https://iot-analytics.com/" target="_blank">IOT Analitycs</a></p></footer>')
              ),
@@ -73,23 +74,46 @@ ui <- fluidPage(
                       ),
              tabPanel("Visualización",
                       tabsetPanel(
-                        tabPanel("Gráficas 1",
-                                 div(
-                                   h1("Gráficas del consumo semanal"),
-                                   div( 
+                        tabPanel("Gráficas de consumo",
 
-                                     img( src="Consumo_SemanalMedioSemana52_Comparacion_09_06-08.png", width="50%", alt="Semanalmedio52"),
+                                   div(
+                                     sidebarPanel(
+                                     h4("Seleccione una fecha"),
                                      br(),
-                                     img( src="Consumo_SemanalMedio_Comp_09_06-08.png", width="50%", alt="Semanal medio")
-                                     ),
-                                 )
+                                     numericInput("Dia", "Día del mes", value = 1, min = 1, max = 31),
+                                     numericInput("Mes", "Mes", value = 1, min = 1, max = 12),
+                                     numericInput("Ano", "Año", value = 2009, min = 2006, max = 2010)
+                                     # ,
+                                    ##  br(),
+                                    ##  # output 1
+                                    ##  h5("Fecha Seleccionada")),
+                                    ##  h2(strong(textOutput("Dia")," de ",textOutput("Mes"), "del año", textOutput("Ano")," ."))
+                                      )
+                                   ),
+                                   mainPanel(
+                                     plotlyOutput("ConsumoSemanal",height = "450px")
+                                   ),
+                                 hr(),
+                                 div(
+                                   sidebarPanel(
+                                     p("Seleccione el año que quiere mostrar:"),
+                                     radioButtons(inputId = "AnoPorcentaje", label = "",choices = 2007:2010,selected = 2009)
+                                   )
                                  ),
-                        tabPanel("Porcentaje de energía"
-                      )
-                      
-                      )
-  )
-))
+                                 mainPanel(
+                                   plotlyOutput("PorcentajeConsumo",height = "450px")
+                                 )
+                                 
+                                   ),
+                        tabPanel("Porcentaje de energía",
+                                    div("Aqui van PIE CHARTS")
+                                 )
+                              )
+                            )
+                        )
+)
+
+
 
   
 
