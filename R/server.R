@@ -133,14 +133,14 @@ server <- function(input, output) {
               name = 'Cocina', type = 'scatter', mode = 'lines') %>%
       add_trace(y = ~plot_line$Sub_metering_2, name = 'Lavandería', mode = 'lines') %>%
       add_trace(y = ~plot_line$Sub_metering_3, name = 'Termo eléctrico & AC', mode = 'lines') %>%
-      layout(title = "Consumo energético de cada submedidor durante un día completo",
+      layout(title = "Consumo energético de cada submedidor \n durante un día completo",
              xaxis = list(title = "Hora"),
-             yaxis = list (title = "Energía (watt-hours)"))
+             yaxis = list (title = "Energía por minuto (watt-hours)"))
     
   })
   
   
-  ### Añadir la fecha seleccionada
+  ### Añadir la fecha seleccionada ####
 #   trend_data <- reactive({
 # 
 #     
@@ -176,7 +176,7 @@ server <- function(input, output) {
 #   })
   
   
-  ## Plot del consumo anual
+## Plot del consumo anual
   
   PorcData <- reactive({
     Granularidad_meses %>% 
@@ -185,51 +185,179 @@ server <- function(input, output) {
   
   
   
-  output$ConsumoMensual <- renderPlotly({
-    
-    plot_line <- PorcData() 
-    
-    plot_ly(x=~plot_line$`Date-MY`,
-            y = ~plot_line$Sub_metering_1,
-            type = 'scatter',mode = 'lines+markers',name="Cocina",
-            line=list(color='rgb(199, 0, 57 )'),marker = list(color =   'rgb(199, 0, 57  )')
-            ) %>%
-      add_trace(y = ~plot_line$Sub_metering_2, name = 'Lavadero', 
-                mode ='lines+markers',
-                line=list(color='rgb(254, 237, 108)'),
-                marker = list(color =   'rgb(243, 221, 63  )')) %>%
-      add_trace(y = ~plot_line$Sub_metering_3, name = 'Calefacción & AC', mode = 'lines+markers',
-                line=list(color='rgb(150, 218, 108)'),
-                marker = list(color ='rgb(150, 218, 108)')) %>%
-      add_trace(y = ~plot_line$Global_active_power, name = 'Energía total', mode = 'lines+markers',
-                line=list(color=     'rgb(89, 118, 236  )'),
-                marker = list(color ='rgb(89, 118, 236  )')) %>%
-      layout(title = "Evolución del consumo energético anual",
-             xaxis = list(title = "Mes del año",
-                          ticktext = list("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"), 
-                          tickvals = plot_line$`Date-MY`
-                          
-             )
-             ,
-             yaxis = list (title = "Energía (Varios-hora)"))
+output$ConsumoMensual <- renderPlotly({
+  
+  plot_line <- PorcData() 
+  
+  plot_ly(x=~plot_line$`Date-MY`,
+          y = ~plot_line$Sub_metering_1,
+          type = 'scatter',mode = 'lines+markers',name="Cocina",
+          line=list(color='rgb(199, 0, 57 )'),marker = list(color =   'rgb(199, 0, 57  )')
+          ) %>%
+    add_trace(y = ~plot_line$Sub_metering_2, name = 'Lavadero', 
+              mode ='lines+markers',
+              line=list(color='rgb(254, 237, 108)'),
+              marker = list(color =   'rgb(243, 221, 63  )')) %>%
+    add_trace(y = ~plot_line$Sub_metering_3, name = 'Calefacción & AC', mode = 'lines+markers',
+              line=list(color='rgb(150, 218, 108)'),
+              marker = list(color ='rgb(150, 218, 108)')) %>%
+    add_trace(y = ~plot_line$Global_active_power, name = 'Energía total', mode = 'lines+markers',
+              line=list(color=     'rgb(89, 118, 236  )'),
+              marker = list(color ='rgb(89, 118, 236  )')) %>%
+    layout(title = "Evolución del consumo energético anual",
+           xaxis = list(title = "Mes del año",
+                        ticktext = list("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"), 
+                        tickvals = plot_line$`Date-MY`
+                        
+           )
+           ,
+           yaxis = list (title = "Energía (Varios-hora)"))
 
-  }) 
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
+}) 
   
 
+#### Plot de la comparación del consumo medio semanal a lo largo de los años #### 
+
+# Media09 <- reactive({
+# filter(Granularidad_dias, year == 2009  ) %>% group_by(weekday) %>% 
+#     summarize ( 
+#       Sub_metering_1 = mean(Sub_metering_1),
+#       Sub_metering_2 = mean(Sub_metering_2),
+#       Sub_metering_3 = mean(Sub_metering_3)
+#     )
+# })
   
   
-  ## Pie Chart Anual 
+#  EnergiaMediaSemanalGlobal <- reactive({
+#   
+#  filter(Granularidad_dias, year != 2009  ) %>% group_by(weekday) %>% 
+#    summarize ( 
+#      Sub_metering_1 = mean(Sub_metering_1),
+#      Sub_metering_2 = mean(Sub_metering_2),
+#      Sub_metering_3 = mean(Sub_metering_3)
+#    ) 
+#  })
+#  
+# output$ConsumoSemanalMedioGlobal <- renderPlotly({
+#      
+#      Media09 <- Media09()  
+#      EnergiaMedia <-  EnergiaMediaSemanalGlobal()
+#      
+#      plot_ly(data = EnergiaMedia, 
+#              x = ~EnergiaMedia$weekday,
+#              y = ~EnergiaMedia$Sub_metering_1,
+#              name = 'Cocina',  type = 'bar') %>% 
+#        add_trace(x~Media09$weekday,
+#                  y = ~Media09$Sub_metering_1,
+#                  name = "Cocina" , line=list(color='blue'), 
+#                  type = 'scatter', 
+#                  mode = 'lines+markers',marker = list(
+#                    color = "blue",showlegend = FALSE
+#                  )) %>% 
+#        add_trace(x~EnergiaMedia$weekday,
+#                  y = ~EnergiaMedia$Sub_metering_2,
+#                  name = "Lavadero" ,
+#                  type = 'bar') %>% 
+#        add_trace(x~Media09$weekday,
+#                  y = ~Media09$Sub_metering_2,
+#                  name = "Lavadero" , line=list(color='green'), 
+#                  type = 'scatter',
+#                  mode = 'lines+markers',marker = list(
+#                    color = "green",showlegend = FALSE
+#                  )) %>% 
+#        add_trace(x~EnergiaMedia$weekday,
+#                  y = ~EnergiaMedia$Sub_metering_3,
+#                  name = 'Termo y AC' ,
+#                  type = 'bar') %>% 
+#        add_trace(x~Media09$weekday,
+#                  y = ~Media09$Sub_metering_3,
+#                  name = 'Termo y AC' ,line=list(color='blueviolet'), 
+#                  type = 'scatter', 
+#                  mode = 'lines+markers',marker = list(
+#                    color = "blueviolet",
+#                  )) %>% 
+#        layout(title = "Comparación del consumo energético semanal medio \n Año 2009 vs años 2006-2008",
+#               xaxis = list(title = "Día de la semana", 
+#                            ticktext=list("Lunes", "Martes", "Miércoles", "Jueves","Viernes","Sábado","Domingo"),
+#                            tickvals=list(1,2,3,4,5,6,7)),
+#               yaxis = list (title = "Energía media (Vatios-hora)")
+#        )
+#    }) 
+
+
+
+
+## Plot de la comparación del consumo energético Semanal ####
+
+MediaSemana09 <- reactive({
+  filter(Granularidad_dias, year == 2009 & week == input$Semana  )
+})
+
+
+UltimaSemana09_OtrosAñosG <- reactive({
+  # Consumo total medio según dia.
+  filter(Granularidad_dias, year != 2009 & week == input$Semana ) %>% 
+    group_by(weekday) %>% 
+    summarize ( 
+      Sub_metering_1 = mean(Sub_metering_1),
+      Sub_metering_2 = mean(Sub_metering_2),
+      Sub_metering_3 = mean(Sub_metering_3)
+    )
+})
+
+
+
+output$ConsumoSemana <- renderPlotly({
+  
+  UltimaSemana09 <- MediaSemana09()  
+  UltimaSemana09_OtrosAños <-  UltimaSemana09_OtrosAñosG()
+  
+  plot_ly(UltimaSemana09, 
+               x = ~UltimaSemana09$Date,
+               y = ~UltimaSemana09$Sub_metering_1,
+               name = 'Cocina', 
+               type = 'scatter', mode = 'lines+markers',showlegend = FALSE) %>%
+    add_trace(y = ~UltimaSemana09$Sub_metering_2, name = 'Lavadero',
+              line=list(color='rgb(254, 237, 108)'),
+              marker = list(color =   'rgb(243, 221, 63  )'),
+              mode = 'lines+markers',showlegend = FALSE) %>%
+    add_trace(y = ~UltimaSemana09$Sub_metering_3,
+              name = 'Termo y AC', 
+              line=list(color='rgb(150, 218, 108)'), 
+              marker = list(color = 'rgb(150, 218, 108)'),
+              mode = 'lines+markers',showlegend = FALSE) %>%
+    add_trace(x~UltimaSemana09_OtrosAños$weekday,
+              y = ~UltimaSemana09_OtrosAños$Sub_metering_1,
+              name = 'Cocina' , marker = list(color = 'rgb(63, 148, 210)'),
+              type = 'bar',showlegend = T) %>% 
+    add_trace(x~UltimaSemana09_OtrosAños$weekday,
+              y = ~UltimaSemana09_OtrosAños$Sub_metering_2,
+              name = 'Lavadero' ,   marker = list(color = 'rgb(254, 237, 108)'),
+              type = 'bar',showlegend = T) %>% 
+    add_trace(x~UltimaSemana09_OtrosAños$weekday,
+              y = ~UltimaSemana09_OtrosAños$Sub_metering_3,
+              name = 'Termo y AC' ,   marker = list(color = 'rgb(150, 218, 108)'),
+              type = 'bar',showlegend = T) %>% 
+    layout(title = "Comparación del consumo energético semanal \n Año 2009 vs Años 2006-2008",
+           xaxis = list(title = "Día de la semana"
+           ),yaxis = list (title = "Energía (Vatios-Hora)"))
+  
+  
+  
+  
+}) 
+
+  
+
+
+  
+
+
+
+# Piecharts ####
+
+
+## Pie Chart Anual 
   pieAnualDatos <- reactive({
     Gda<- data.frame(Granularidad_dias %>% 
       filter(year ==  input$AnoPieAnual & month == input$MesPieAnual & day == input$DiaPieAnual ) %>% 

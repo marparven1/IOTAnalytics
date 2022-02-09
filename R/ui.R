@@ -106,6 +106,21 @@ ui <- fluidPage(
                                  ),
                                  mainPanel(
                                    plotlyOutput("ConsumoMensual",height = "450px")
+                                 ),
+                                 hr(),
+                
+                              #   mainPanel(
+                              #     plotlyOutput("ConsumoSemanalMedioGlobal",height = "450px")
+                              #   ),
+                              #    hr(),
+                                 div(
+                                   sidebarPanel(
+                                     p("Seleccione la semana del año que quiere mostrar:"),
+                                     numericInput("Semana", label = "Semana",value = 1, min = 1, max = 52)
+                                   )
+                                 ),
+                                 mainPanel(
+                                   plotlyOutput("ConsumoSemana",height = "450px")
                                  )
                                  
                                    ),
