@@ -80,50 +80,59 @@ ui <- fluidPage(
                                     div(
                                       br(),br()
                                     ),
-                                 div(
-                                   div(
-                                     h2("Consumo energético por minuto"), 
-                                     sidebarPanel(
-                                     h4("Seleccione una fecha"),
-                                     br(),
-                                     numericInput("Dia", "Día del mes", value = 1, min = 1, max = 31),
-                                     numericInput("Mes", "Mes", value = 1, min = 1, max = 12),
-                                     numericInput("Ano", "Año", value = 2009, min = 2006, max = 2010)
-                                     # ,
-                                    ##  br(),
-                                    ##  # output 1
-                                    ##  h5("Fecha Seleccionada")),
-                                    ##  h2(strong(textOutput("Dia")," de ",textOutput("Mes"), "del año", textOutput("Ano")," ."))
-                                      )
-                                   ),
-                                   mainPanel(
-                                     plotlyOutput("ConsumoSemanal",height = "450px")
-                                   )),
-
+                                 hr(),
+                                 
+                                 fluidRow(
+                                   h2("Consumo energético por minuto"), 
+                                   br(),
+                                   column(12,
+                                          sidebarPanel(
+                                            h4("Seleccione una fecha"),
+                                            br(),
+                                            numericInput("Dia", "Día del mes", value = 1, min = 1, max = 31),
+                                            numericInput("Mes", "Mes", value = 1, min = 1, max = 12),
+                                            numericInput("Ano", "Año", value = 2009, min = 2006, max = 2010)
+                                            # ,
+                                            ##  br(),
+                                            ##  # output 1
+                                            ##  h5("Fecha Seleccionada")),
+                                            ##  h2(strong(textOutput("Dia")," de ",textOutput("Mes"), "del año", textOutput("Ano")," ."))
+                                          ),
+                                          mainPanel(
+                                            plotlyOutput("ConsumoSemanal"  ,height = "450px" 
+                                                         
+                                            )
+                                          )
+                                         
+                                   )
+                                 ),
                                  hr(),
 
-                                 div(
-                                 div(
+                                 fluidRow(
+                               
                                    h2("Consumo energético anual"), 
+                                   br(),
+                                   column(12,
                                    sidebarPanel(
                                      h4("Seleccione el año que quiere mostrar:"),
                                      radioButtons(inputId = "AnoPorcentaje", label = "",choices = 2007:2010,selected = 2009)
-                                   )
-                                 ),
+                                   ),
+                              
                                  mainPanel(
                                    plotlyOutput("ConsumoMensual",height = "450px")
                                  )
-                                 ),
-                                
-                                 br(),
+                                 ) 
+                                )  ,
+                                 hr(),
                               #   mainPanel(
                               #     plotlyOutput("ConsumoSemanalMedioGlobal",height = "450px")
                               #   ),
                               #    hr(),
-                              div(
-                                 div(
-                                   br(),
+                              
+                              fluidRow(
                                    h2("Consumo energético semanal"), 
+                                   br(),
+                                   column(12,
                                    sidebarPanel(
                                      h4("Seleccione la semana del año que quiere mostrar:"),
                                      # price slider
@@ -131,59 +140,64 @@ ui <- fluidPage(
                                                  label = "", 
                                                  min = 1, max = 52, 
                                                  value = 1)
-                                   )
-                                 ),
+                                   ),
                                  mainPanel(
                                    plotlyOutput("ConsumoSemana",height = "450px")
-                                 ) ),
-                              hr(),
-                              div(
-                                h2("Evolución anual completa"),
-                                             plotlyOutput("Prueba2",height = "500px")
+                                 ) 
+                                 )
                               )
-                
+                                 ,
+                              hr(),
+                              fluidRow(
+                                h2("Evolución anual completa"),
+                                br(),
+                                column(12,
+                                plotlyOutput("Prueba2",height = "500px")
+                                )
+                              )
                                    ),
                         tabPanel("Porcentaje de energía",
-                                   div(br()),
-                                
-                                   div(
-                                 div(
-                                   sidebarPanel(
-                                     h4("Seleccione una fecha"),
+                                 fluidRow(
+                                    h2("Porcentaje total del consumo energético"),
                                      br(),
+                                     column(12,
+                                  sidebarPanel(
+                                    h4("Seleccione una fecha"),
                                      numericInput("DiaPieAnual", "Día del mes", value = 1, min = 1, max = 31),
                                      numericInput("MesPieAnual", "Mes", value = 1, min = 1, max = 12),
-                                     numericInput("AnoPieAnual", "Año", value = 2009, min = 2006, max = 2010)
-                                     
-                                   )
-                                 ),
+                                     numericInput("AnoPieAnual", "Año", value = 2009, min = 2006, max = 2010) 
+                                     ),
                                  mainPanel(
                                    plotlyOutput("PieAnual",height = "450px")
+                                   )
                                  )
-                                   ),
-                                 div(
-                                   div(
-                                     sidebarPanel(
-                                       h4("Seleccione una fecha"),
+                                   
+                                 ),
+                                 hr(),
+                                 
+                                 fluidRow(
+                                       h2("Consumo energético diario por horas") ,
                                        br(),
+                                       column(12,
+                                              sidebarPanel(
+                                       h4("Seleccione una fecha"),
                                        numericInput("DiaPieAnualPorHora", "Día del mes", value = 1, min = 1, max = 31),
                                        numericInput("MesPieAnualPorHora", "Mes", value = 1, min = 1, max = 12),
                                        numericInput("AnoPieAnualPorHora", "Año", value = 2009, min = 2006, max = 2010)
-                                       
-                                     )
-                                   ),
+                                       )  ,
                                    mainPanel(
-                                    h3("Porcentaje del consumo energético según la hora del día"),br(),
-                                    plotlyOutput("Prueba")
+                                    h3("Porcentaje del consumo energético según la hora del día"),
+                                    br(),
+                                    plotlyOutput("Prueba",height = "450px" )
                                    )
                                  )
-
                                  )
                               )
                             )
                         )
 )
 
+)
 
 
   
