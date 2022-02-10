@@ -78,9 +78,11 @@ ui <- fluidPage(
                       tabsetPanel(
                         tabPanel("Gráficas de consumo",
                                     div(
-                                      p(),p(),p()
+                                      br(),br()
                                     ),
+                                 div(
                                    div(
+                                     h2("Consumo energético por minuto"), 
                                      sidebarPanel(
                                      h4("Seleccione una fecha"),
                                      br(),
@@ -96,33 +98,50 @@ ui <- fluidPage(
                                    ),
                                    mainPanel(
                                      plotlyOutput("ConsumoSemanal",height = "450px")
-                                   ),
+                                   )),
+
                                  hr(),
+
                                  div(
+                                 div(
+                                   h2("Consumo energético anual"), 
                                    sidebarPanel(
-                                     p("Seleccione el año que quiere mostrar:"),
+                                     h4("Seleccione el año que quiere mostrar:"),
                                      radioButtons(inputId = "AnoPorcentaje", label = "",choices = 2007:2010,selected = 2009)
                                    )
                                  ),
                                  mainPanel(
                                    plotlyOutput("ConsumoMensual",height = "450px")
+                                 )
                                  ),
-                                 hr(),
-                
+                                
+                                 br(),
                               #   mainPanel(
                               #     plotlyOutput("ConsumoSemanalMedioGlobal",height = "450px")
                               #   ),
                               #    hr(),
+                              div(
                                  div(
+                                   br(),
+                                   h2("Consumo energético semanal"), 
                                    sidebarPanel(
-                                     p("Seleccione la semana del año que quiere mostrar:"),
-                                     numericInput("Semana", label = "Semana",value = 1, min = 1, max = 52)
+                                     h4("Seleccione la semana del año que quiere mostrar:"),
+                                     # price slider
+                                     sliderInput(inputId = "Semana", 
+                                                 label = "", 
+                                                 min = 1, max = 52, 
+                                                 value = 1)
                                    )
                                  ),
                                  mainPanel(
                                    plotlyOutput("ConsumoSemana",height = "450px")
-                                 )
-                                 
+                                 ) ),
+                              hr(),
+                              div(
+                                h2("Evolución anual completa"),
+                                             plotlyOutput("Prueba2",height = "500px")
+                              )
+                
                                    ),
                         tabPanel("Porcentaje de energía",
                                    div(br()),

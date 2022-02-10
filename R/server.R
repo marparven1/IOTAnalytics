@@ -30,6 +30,7 @@ server <- function(input, output) {
   # to renderPlot to indicate that:
   #
 
+#### DataTables ####
   
   output$Meses<- DT::renderDataTable(
     DT::datatable({
@@ -110,9 +111,9 @@ server <- function(input, output) {
     colnames = colnames(DatosCompletos)
     ))
   
+#### Gráficas ####
   
-  
-  ## Plot Consumo semanal 
+## Plot Consumo semanal por minuto ####
 
   
   plotData <- reactive({
@@ -140,7 +141,7 @@ server <- function(input, output) {
   })
   
   
-  ### Añadir la fecha seleccionada ####
+### Añadir la fecha seleccionada ####
 #   trend_data <- reactive({
 # 
 #     
@@ -176,9 +177,9 @@ server <- function(input, output) {
 #   })
   
   
-## Plot del consumo anual
+## Plot del consumo anual ####
   
-  PorcData <- reactive({
+PorcData <- reactive({
     Granularidad_meses %>% 
       filter(year == input$AnoPorcentaje) 
   })
@@ -294,7 +295,7 @@ MediaSemana09 <- reactive({
 })
 
 
-UltimaSemana09_OtrosAñosG <- reactive({
+UltimaSemana09_OtrosAnosG <- reactive({
   # Consumo total medio según dia.
   filter(Granularidad_dias, year != 2009 & week == input$Semana ) %>% 
     group_by(weekday) %>% 
@@ -310,7 +311,7 @@ UltimaSemana09_OtrosAñosG <- reactive({
 output$ConsumoSemana <- renderPlotly({
   
   UltimaSemana09 <- MediaSemana09()  
-  UltimaSemana09_OtrosAños <-  UltimaSemana09_OtrosAñosG()
+  UltimaSemana09_OtrosAños <-  UltimaSemana09_OtrosAnosG()
   
   plot_ly(UltimaSemana09, 
                x = ~UltimaSemana09$Date,
@@ -354,6 +355,58 @@ output$ConsumoSemana <- renderPlotly({
 
 
 
+
+
+## Prueba ####
+
+DataPrueba <- reactive({
+  Granularidad_meses
+})
+
+
+
+output$Prueba2  <- renderPlotly({
+  ds <- DataPrueba()
+  
+  fig <- plot_ly(ds, x = ~ds$`Date-MY`)
+  fig <- fig %>% add_lines(y = ~ds$Sub_metering_1, name = "Cocina"            ,type = "scatter",mode = 'lines+markers',line=list(color='rgb(254, 237, 108)'),marker = list(color =   'rgb(243, 221, 63  )'))
+  fig <- fig %>% add_lines(y = ~ds$Sub_metering_2, name = "Lavadero"          ,type = "scatter",mode = 'lines+markers', line=list(color='rgb(199, 0, 57 )'), marker = list(color =   'rgb(199, 0, 57  )'  ))
+  fig <- fig %>% add_lines(y = ~ds$Sub_metering_3, name = "Calefacción & AC"  ,type = "scatter",mode = 'lines+markers', line=list(color='rgb(150, 218, 108)'),marker = list(color ='rgb(150, 218, 108)'   ))
+  fig <- fig %>% add_lines(y = ~ds$Global_active_power, name = "Energía total",type = "scatter",mode = 'lines+markers',line=list(color=  'rgb(89, 118, 236  )'),marker = list(color ='rgb(89, 118, 236  )'))
+  fig <- fig %>% layout(
+    title = "",
+    xaxis = list(title = "Fecha",
+      rangeselector = list(
+        buttons = list(
+          list(
+            count = 3,
+            label = "3 mo",
+            step = "month",
+            stepmode = "forward"),
+          list(
+            count = 6,
+            label = "6 mo",
+            step = "month",
+            stepmode = "forward"),
+          list(
+            count = 1,
+            label = "1 yr",
+            step = "year",
+            stepmode = "forward"),
+          list(step = "all")
+          )
+        ),
+      
+      rangeslider = list(type = "date")),
+    
+    yaxis = list(title = "Energía (Varios-hora)"))
+  
+  fig
+
+
+}) 
+
+  
 # Piecharts ####
 
 
