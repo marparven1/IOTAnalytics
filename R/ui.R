@@ -30,6 +30,7 @@ ui <- fluidPage(
                        includeHTML("html/Home.Rhtml"),
                      includeHTML("html/footer.html")
              ),
+           #### DATOS ####
            navbarMenu(
              "Datos",
                       tabPanel("Descripción de los datos",
@@ -74,8 +75,10 @@ ui <- fluidPage(
                                includeHTML("html/footer.html")
                       )
                       ),
+           #### Visualización ####
              tabPanel("Visualización",
                       tabsetPanel(
+                        #### Consumo ####
                         tabPanel("Gráficas de consumo",
                                     div(
                                       br(),br()
@@ -103,7 +106,6 @@ ui <- fluidPage(
                                                          
                                             )
                                           )
-                                         
                                    )
                                  ),
                                  hr(),
@@ -123,11 +125,35 @@ ui <- fluidPage(
                                  )
                                  ) 
                                 )  ,
+                                
+                                hr(),
+                                fluidRow(
+                                  h2("Evolución completa del consumo energético mensual"),
+                                  br(),
+                                  column(12,
+                                         plotlyOutput("Prueba2",height = "500px")
+                                  )
+                                ),
                                  hr(),
                               #   mainPanel(
                               #     plotlyOutput("ConsumoSemanalMedioGlobal",height = "450px")
                               #   ),
                               #    hr(),
+                              fluidRow(
+                                h2("Comparación del consumo energético semanal medio"),
+                                br(),
+                                column(12,
+                                       sidebarPanel(
+                                       
+                                         p("Nota: Las barras corresponden al consumo energético semanal medio de los años 
+                                       2006-2008, mientras que la línea corresponde al consumo energético semanal del año 2009.")
+                                       ),
+                                       mainPanel(
+                                         plotlyOutput("ConsumoMedio",height = "450px")
+                                       ) 
+                                )
+                              ),
+                              hr(),
                               
                               fluidRow(
                                    h2("Consumo energético semanal"), 
@@ -139,23 +165,21 @@ ui <- fluidPage(
                                      sliderInput(inputId = "Semana", 
                                                  label = "", 
                                                  min = 1, max = 52, 
-                                                 value = 1)
+                                                 value = 1),
+                                     br(),
+                                     p("Nota: Las barras corresponden al consumo energético semanal medio de los años 
+                                       2006-2008, mientras que la línea corresponde al consumo energético semanal del año 2009.")
                                    ),
                                  mainPanel(
                                    plotlyOutput("ConsumoSemana",height = "450px")
                                  ) 
                                  )
                               )
-                                 ,
-                              hr(),
-                              fluidRow(
-                                h2("Evolución anual completa"),
-                                br(),
-                                column(12,
-                                plotlyOutput("Prueba2",height = "500px")
-                                )
-                              )
+                      
+                                 
+                             
                                    ),
+                        #### Porcentaje Energia ####
                         tabPanel("Porcentaje de energía",
                                  fluidRow(
                                     h2("Porcentaje total del consumo energético"),
@@ -193,11 +217,26 @@ ui <- fluidPage(
                                  )
                                  )
                               )
+                        
                             )
-                        )
-)
+                        ),
+           
+           
+           
+           
+           #### Series Temporales ####
+           tabPanel("Predicción del consumo",
+                    tabsetPanel(
+                      tabPanel("Diaria"
+                    ),
+                    tabPanel("Mensual"
+                    ),
+                    tabPanel("Anual"
+                             )
+                )
 
 )
+))
 
 
   

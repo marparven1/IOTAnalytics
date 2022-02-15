@@ -217,7 +217,82 @@ output$ConsumoMensual <- renderPlotly({
 }) 
   
 
+
+
+
 #### Plot de la comparación del consumo medio semanal a lo largo de los años #### 
+
+
+DataMedia09 <- reactive({
+  filter(Granularidad_dias, year == 2009  ) %>% group_by(weekday) %>% 
+    summarize ( 
+      Sub_metering_1 = mean(Sub_metering_1),
+      Sub_metering_2 = mean(Sub_metering_2),
+      Sub_metering_3 = mean(Sub_metering_3)
+    )
+})
+
+
+DataMediaResto <- reactive({
+  filter(Granularidad_dias, year != 2009  ) %>% group_by(weekday) %>% 
+    summarize ( 
+      Sub_metering_1 = mean(Sub_metering_1),
+      Sub_metering_2 = mean(Sub_metering_2),
+      Sub_metering_3 = mean(Sub_metering_3)
+    )
+})
+
+
+output$ConsumoMedio <- renderPlotly({
+  Media09 <- DataMedia09()
+  EnergiaMedia <- DataMediaResto()
+  plot_ly(EnergiaMedia, 
+          x = ~EnergiaMedia$weekday,
+          y = ~EnergiaMedia$Sub_metering_1,
+          name = 'Cocina',  type = 'bar') %>% 
+    add_trace(x~Media09$weekday,
+              y = ~Media09$Sub_metering_1,
+              name = "Cocina" , line=list(color='blue'), 
+              type = 'scatter', 
+              mode = 'lines+markers',showlegend = FALSE,
+              marker = list(
+                color = "blue"
+              )) %>% 
+    add_trace(x~EnergiaMedia$weekday,
+              y = ~EnergiaMedia$Sub_metering_2,
+              name = "Lavadero" ,
+              type = 'bar') %>% 
+    add_trace(x~Media09$weekday,
+              y = ~Media09$Sub_metering_2,
+              name = "Lavadero" , line=list(color='green'), 
+              type = 'scatter',
+              mode = 'lines+markers',showlegend = FALSE,
+              marker = list(
+                color = "green"
+              )) %>% 
+    add_trace(x~EnergiaMedia$weekday,
+              y = ~EnergiaMedia$Sub_metering_3,
+              name = 'Termo y AC' ,
+              type = 'bar') %>% 
+    add_trace(x~Media09$weekday,
+              y = ~Media09$Sub_metering_3,
+              name = 'Termo y AC' ,line=list(color='blueviolet'), 
+              type = 'scatter', 
+              mode = 'lines+markers',showlegend = FALSE,
+              marker = list(
+                color = "blueviolet"
+              )) %>% 
+    layout(title = "Comparación del consumo energético semanal medio \n Año 2009 vs años 2006-2008",
+           xaxis = list(title = "Día de la semana", 
+                        ticktext=list("Lunes", "Martes", "Miércoles", "Jueves","Viernes","Sábado","Domingo"),
+                        tickvals=list(1,2,3,4,5,6,7)),
+           yaxis = list (title = "Energía media (Vatios-hora)")
+    )
+}) 
+
+
+
+
 
 # Media09 <- reactive({
 # filter(Granularidad_dias, year == 2009  ) %>% group_by(weekday) %>% 
@@ -360,7 +435,7 @@ output$ConsumoSemana <- renderPlotly({
 ## Prueba ####
 
 DataPrueba <- reactive({
-  Granularidad_meses
+ ungroup( Granularidad_meses )
 })
 
 
@@ -368,38 +443,39 @@ DataPrueba <- reactive({
 output$Prueba2  <- renderPlotly({
   ds <- DataPrueba()
   
-  fig <- plot_ly(ds, x = ~ds$`Date-MY`)
-  fig <- fig %>% add_lines(y = ~ds$Sub_metering_1, name = "Cocina"            ,type = "scatter",mode = 'lines+markers',line=list(color='rgb(254, 237, 108)'),marker = list(color =   'rgb(243, 221, 63  )'))
-  fig <- fig %>% add_lines(y = ~ds$Sub_metering_2, name = "Lavadero"          ,type = "scatter",mode = 'lines+markers', line=list(color='rgb(199, 0, 57 )'), marker = list(color =   'rgb(199, 0, 57  )'  ))
-  fig <- fig %>% add_lines(y = ~ds$Sub_metering_3, name = "Calefacción & AC"  ,type = "scatter",mode = 'lines+markers', line=list(color='rgb(150, 218, 108)'),marker = list(color ='rgb(150, 218, 108)'   ))
-  fig <- fig %>% add_lines(y = ~ds$Global_active_power, name = "Energía total",type = "scatter",mode = 'lines+markers',line=list(color=  'rgb(89, 118, 236  )'),marker = list(color ='rgb(89, 118, 236  )'))
-  fig <- fig %>% layout(
-    title = "",
-    xaxis = list(title = "Fecha",
-      rangeselector = list(
-        buttons = list(
-          list(
-            count = 3,
-            label = "3 mo",
-            step = "month",
-            stepmode = "forward"),
-          list(
-            count = 6,
-            label = "6 mo",
-            step = "month",
-            stepmode = "forward"),
-          list(
-            count = 1,
-            label = "1 yr",
-            step = "year",
-            stepmode = "forward"),
-          list(step = "all")
-          )
-        ),
-      
-      rangeslider = list(type = "date")),
-    
-    yaxis = list(title = "Energía (Varios-hora)"))
+  fig <- plot_ly(ds,  type = 'scatter', mode ='lines' )
+  fig <- fig %>% add_lines(x =~as.Date.character(  ds$`Date-MY` ) ,y = ~ds$Sub_metering_1, 
+                           name = "Cocina"  ,line=list(color='rgb(254, 237, 108)'))
+  fig <- fig %>% add_lines(x = ~as.Date.character(  ds$`Date-MY` ) ,y = ~ds$Sub_metering_2, 
+                           name = "Lavadero" , line=list(color='rgb(199, 0, 57 )'))
+  fig <- fig %>% add_lines(x = ~as.Date.character(  ds$`Date-MY` ),y = ~ds$Sub_metering_3,
+                           name = "Calefacción & AC"  , line=list(color='rgb(150, 218, 108)'))
+  fig <- fig %>% add_lines(x = ~as.Date.character(  ds$`Date-MY` ) ,y = ~ds$Global_active_power,
+                           name = "Energía total", line=list(color=  'rgb(89, 118, 236  )')) 
+  fig <- fig %>% layout( title='',
+                         xaxis = list(title = "Fecha",
+                                      rangeslider = list(type = "date"),
+                                      rangeselector = list(
+                                        buttons = list(
+                                          list(
+                                            count = 3,
+                                            label = "3 mo",
+                                            step = "month",
+                                            stepmode = "forward"),
+                                          list(
+                                            count = 6,
+                                            label = "6 mo",
+                                            step = "month",
+                                            stepmode = "forward"),
+                                          list(
+                                            count = 1,
+                                            label = "1 yr",
+                                            step = "year",
+                                            stepmode = "forward"),
+                                          list(step = "all")))), 
+                         yaxis = list(title = "Energía (Varios-hora)") )
+  fig
+  
   
   fig
 
@@ -410,7 +486,7 @@ output$Prueba2  <- renderPlotly({
 # Piecharts ####
 
 
-## Pie Chart Anual 
+## Pie Chart Anual ####
   pieAnualDatos <- reactive({
     Gda<- data.frame(Granularidad_dias %>% 
       filter(year ==  input$AnoPieAnual & month == input$MesPieAnual & day == input$DiaPieAnual ) %>% 
