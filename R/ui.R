@@ -86,7 +86,7 @@ ui <- fluidPage(
                                  hr(),
                                  
                                  fluidRow(
-                                   h2("Consumo energético por minuto"), 
+                                   h2("Consumo energético diario por minuto"), 
                                    br(),
                                    column(12,
                                           sidebarPanel(
@@ -109,9 +109,28 @@ ui <- fluidPage(
                                    )
                                  ),
                                  hr(),
-
                                  fluidRow(
-                               
+                                   h2("Consumo energético diario"), 
+                                   br(),
+                                   column(12,
+                                          sidebarPanel(
+                                            # Selección del submétering
+                                            selectInput(inputId = "Submetering", label = strong("Unidad de energía"),
+                                                        choices = c("Sub_metering_1"   , "Sub_metering_2"     , "Sub_metering_3"  , "Global_active_power", "energia2" ),
+                                                        selected = "Global_active_power"),
+                                            # Selección del rango que se va a plottear
+                                            dateRangeInput("dateRange", strong("Rango de fechas"), start = "2006-12-16", end = "2010-11-26",
+                                                           min = "2006-12-16", max = "2010-11-26")
+                                            ),
+                                          mainPanel(
+                                            p("Este gráfico no me sale :(")
+                                           #  ,
+                                           #  plotOutput(outputId="ConsumoDiarioRango"  ,height = "450px" )
+                                          )
+                                     )
+                                 ),
+                                 hr(),
+                                 fluidRow(
                                    h2("Consumo energético anual"), 
                                    br(),
                                    column(12,
@@ -175,9 +194,6 @@ ui <- fluidPage(
                                  ) 
                                  )
                               )
-                      
-                                 
-                             
                                    ),
                         #### Porcentaje Energia ####
                         tabPanel("Porcentaje de energía",
@@ -220,16 +236,54 @@ ui <- fluidPage(
                         
                             )
                         ),
-           
-           
-           
-           
            #### Series Temporales ####
            tabPanel("Predicción del consumo",
                     tabsetPanel(
                       tabPanel("Diaria"
                     ),
-                    tabPanel("Mensual"
+                    tabPanel("Mensual",
+                             tabsetPanel(
+                               tabPanel(
+                                 "Cocina",
+                                 
+                                 h1("Evolución mensual del consumo de los años 2007 a 2007 y predicción para el año 2010"),
+                                 br(),
+                                 fluidRow(
+                                   h2("Visualización de los datos"),
+                                   column(6,
+                                         
+                                          img(src = "PlotMensualCocina.png" , width="100%"
+                                              )
+                                   ),
+                                   column(6,
+                                            div(
+                                              p("Aqui irian comentarios ajdfjsdkgfjskgjsogfjsojdfosgjosjdvosdvosjdvosjdvojsdvojsdvojsdvoj",
+                                                p("y más comentarios")))  
+                                   )
+                                 ),
+                                 hr(),
+                                 fluidRow(
+                                   h2("Descomposición de la serie")
+                                 ),
+                                 hr(),
+                                 fluidRow( 
+                                   h2("Predicción del consumo")
+                                   )
+                                 
+                                 
+                               ),
+                               tabPanel(
+                                 "Lavadero"
+                               ),
+                               tabPanel(
+                                 "Termo eléctrico y aire acondicionado"
+                               ),
+                               tabPanel(
+                                 "Energía global"
+                               )
+                             ),
+                             
+                           
                     ),
                     tabPanel("Anual"
                              )

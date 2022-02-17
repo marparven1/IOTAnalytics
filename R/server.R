@@ -176,6 +176,42 @@ server <- function(input, output) {
 #     
 #   })
   
+##  Consumo energético diario ####  
+
+  
+##### DatosRango<- Granularidad_dias%>%
+#####   pivot_longer(cols = c(7,8,9,10,11),
+#####                names_to = "Energia",
+#####                values_to = "valorEnergetico") %>% 
+#####   select(Date , Energia , valorEnergetico)
+##### 
+#####   
+##### fecha_seleccionada <- reactive({
+#####   req(input$dateRange)
+#####   validate(need(!is.na(input$dateRange[1]) & !is.na(input$dateRange[2]), "Error: Seleccione fecha de inicio y de fin."))
+#####   validate(need(input$dateRange[1] < input$dateRange[2], "Error: La fecha de inicio no debe ser previa a la fecha de fin."))
+#####   DatosRango  %>%
+#####     filter(
+#####       Energia == input$Submetering,
+#####       Date > input$dateRange[1] & Date < input$dateRange[2]
+#####       
+#####   )
+##### })
+#####   
+##### 
+#####   
+#####   ## ConsumoDiarioRango
+#####   
+#####   output$ConsumoDiarioRango <- renderPlotly({
+#####     plot(x =  fecha_seleccionada()$Date, y =   fecha_seleccionada()$valorEnergetico, type = "l",
+#####          xlab = "Date", ylab = "Trend index")
+#####   }) 
+#####   
+  
+  
+  
+  
+  
   
 ## Plot del consumo anual ####
   
@@ -183,6 +219,7 @@ PorcData <- reactive({
     Granularidad_meses %>% 
       filter(year == input$AnoPorcentaje) 
   })
+  
   
   
   
