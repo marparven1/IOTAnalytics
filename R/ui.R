@@ -119,13 +119,11 @@ ui <- fluidPage(
                                                         choices = c("Sub_metering_1"   , "Sub_metering_2"     , "Sub_metering_3"  , "Global_active_power", "energia2" ),
                                                         selected = "Global_active_power"),
                                             # Selección del rango que se va a plottear
-                                            dateRangeInput("dateRange", strong("Rango de fechas"), start = "2006-12-16", end = "2010-11-26",
+                                            dateRangeInput("dateRange", strong("Rango de fechas"), start = "2007-07-28", end = "2007-08-28",
                                                            min = "2006-12-16", max = "2010-11-26")
                                             ),
                                           mainPanel(
-                                            p("Este gráfico no me sale :(")
-                                           #  ,
-                                           #  plotOutput(outputId="ConsumoDiarioRango"  ,height = "450px" )
+                                             plotOutput(outputId="ConsumoDiarioRango"  ,height = "450px" )
                                           )
                                      )
                                  ),
@@ -162,15 +160,16 @@ ui <- fluidPage(
                                 h2("Comparación del consumo energético semanal medio"),
                                 br(),
                                 column(12,
-                                       sidebarPanel(
-                                       
-                                         p("Nota: Las barras corresponden al consumo energético semanal medio de los años 
-                                       2006-2008, mientras que la línea corresponde al consumo energético semanal del año 2009.")
-                                       ),
+                                 
                                        mainPanel(
-                                         plotlyOutput("ConsumoMedio",height = "450px")
-                                       ) 
-                                )
+                                  plotlyOutput("ConsumoMedio",height = "450px")
+                                ),
+                               
+                                sidebarPanel(    
+                                  helpText("Nota: Las barras corresponden al consumo energético semanal medio de los años 
+                                       2006-2008, mientras que la línea corresponde al consumo energético semanal del año 2009."))
+                             
+                                ),
                               ),
                               hr(),
                               
@@ -186,12 +185,15 @@ ui <- fluidPage(
                                                  min = 1, max = 52, 
                                                  value = 1),
                                      br(),
-                                     p("Nota: Las barras corresponden al consumo energético semanal medio de los años 
+                                     helpText("Nota: Las barras corresponden al consumo energético semanal medio de los años 
                                        2006-2008, mientras que la línea corresponde al consumo energético semanal del año 2009.")
                                    ),
                                  mainPanel(
                                    plotlyOutput("ConsumoSemana",height = "450px")
-                                 ) 
+                                 ) ,
+                             
+                                 br(),hr(),br(),
+                                 includeHTML("html/footer.html")
                                  )
                               )
                                    ),
@@ -211,87 +213,126 @@ ui <- fluidPage(
                                    plotlyOutput("PieAnual",height = "450px")
                                    )
                                  )
-                                   
                                  ),
                                  hr(),
-                                 
                                  fluidRow(
-                                       h2("Consumo energético diario por horas") ,
-                                       br(),
-                                       column(12,
-                                              sidebarPanel(
-                                       h4("Seleccione una fecha"),
-                                       numericInput("DiaPieAnualPorHora", "Día del mes", value = 1, min = 1, max = 31),
-                                       numericInput("MesPieAnualPorHora", "Mes", value = 1, min = 1, max = 12),
-                                       numericInput("AnoPieAnualPorHora", "Año", value = 2009, min = 2006, max = 2010)
-                                       )  ,
-                                   mainPanel(
-                                    h3("Porcentaje del consumo energético según la hora del día"),
-                                    br(),
-                                    plotlyOutput("Prueba",height = "450px" )
-                                   )
-                                 )
-                                 )
+                                   column(12,
+                                          sidebarPanel(
+                                            dateInput("DatePie", strong("Fecha"), value =  "2009-01-02", 
+                                                      min = "2006-12-16", max = "2010-11-26")
+                                          ) ,
+                                          mainPanel(
+                                            h3("Porcentaje del consumo energético según la hora del día"),
+                                            br(),
+                                            plotlyOutput("Prueba",height = "450px",width = "80%")
+                                          )
+                                          )
+                                   
+                                 ),
+                                 
+                                 br(),hr(),br(),
+                                 includeHTML("html/footer.html")
+                                 
                               )
                         
                             )
                         ),
            #### Series Temporales ####
-           tabPanel("Predicción del consumo",
-                    tabsetPanel(
-                      tabPanel("Diaria"
-                    ),
-                    tabPanel("Mensual",
-                             tabsetPanel(
-                               tabPanel(
-                                 "Cocina",
-                                 
-                                 h1("Evolución mensual del consumo de los años 2007 a 2007 y predicción para el año 2010"),
-                                 br(),
-                                 fluidRow(
-                                   h2("Visualización de los datos"),
-                                   column(6,
-                                         
-                                          img(src = "PlotMensualCocina.png" , width="100%"
-                                              )
+           navbarMenu(
+            
+             "Pronóstico de consumo",
+             tabPanel("Diaria"),
+             tabPanel("Mensual",
+                      tabsetPanel(
+                        tabPanel(
+                          "Cocina",
+                          br(),
+                          h1("Evolución mensual del consumo. Años 2007-2010 y predicción para el año 2010"),
+                          br(),
+                          fluidRow(
+                            h2("Visualización de los datos"),
+                            column(9,
+                                 img(src = "PlotMensualCocina.png" , width="100%")
+                            ),
+                            column(3,
+                                   div(
+                                     br(),
+                                     p("
+                                       Podemos apreciar como el consumo energético durante los meses de verano es más bajo"),
+                                     p("Además, la línea discontinua roja muestra la tendencia de consumo energético, que en este caso es creciente a medida que avanza el tiempo."),
+                                     p("En definitiva, la gráfica nos muestra el comportamiento de consumo energético de la cocina. Podemos observar dos picos donde el consumo ha sido
+                                       bastante inferior al resto, en el mes de Junio del año 2008 y el mes de Mayo del año 2009. \n Estos dos valores son valores atípicos,
+                                       son unos valores aislados que podrían influir en el pronóstico del consumo."),
+                                     style="text-align:justify; margin: auto;"
+                                     )  
+                            )
+                          ),
+                          hr(),
+                          fluidRow(
+                            h2("Descomposición de la serie"),
+                            column(7,
+                                   img(src = "PlotMensualDescomposicionCocina.png" , width="100%")),
+                            column(5,
+                                   div(
+                                     br(),
+                                     p("Data: Es el mismo gráfico que tenemos en el apartado visualización"),
+                                     p("Remainder: Ruido. Corresponde a las variaciones irregulares que no se pueden predecir"),
+                                     p("Seasonal: Componente estacional: Podemos ver que hay movimientos que se repiten cada año, es decir,
+                                       que el consumo energético mensual es similar para los mismos meses en distintos años."),
+                                     p("Trend: La tendencia es el conportamiento a largo plazo del consumo. En nuestro caso, la tendencia del consumo crece con los años."),
+                                     style="text-align:justify; margin: auto;"
+                                   ))
+                          ),
+                          hr(),
+                          fluidRow(
+                            h2("Visualización del consumo sin estacionalidad"),
+                            column(12,
+                                   h3("Serie sin estacionalidad"),
+                                   img(src = "PlotMCocinaSinEstac.png" , width="100%", height=400)
+                                   )
+                            
+                          ),
+                          hr(),
+                          fluidRow( 
+                            h2("Pronóstico del consumo energético para el año 2010"),
+                            br(),
+                            column(5,
+                                   img(src = "PredConsMenCoc.png" , width="100%")
                                    ),
-                                   column(6,
-                                            div(
-                                              p("Aqui irian comentarios ajdfjsdkgfjskgjsogfjsojdfosgjosjdvosdvosjdvosjdvojsdvojsdvojsdvoj",
-                                                p("y más comentarios")))  
+                            column(5,
+                                   img(src = "PredConsMensCoc2.png" , width="100%")
+                                   ),
+                            column(2,
+                                  div(
+                                   p("Observamos como el pronóstico del consumo energético
+                                     para el período comprendido entre los meses Mayo-Junio es bastante inferior al resto
+                                     en ambos casos."),
+                                   p("El pronóstico de consumo es bastante superior en 
+                                     el caso que no eliminamos la estacionalidad."),
+                                   style="text-align:justify; margin: auto;")
                                    )
-                                 ),
-                                 hr(),
-                                 fluidRow(
-                                   h2("Descomposición de la serie")
-                                 ),
-                                 hr(),
-                                 fluidRow( 
-                                   h2("Predicción del consumo")
-                                   )
-                                 
-                                 
-                               ),
-                               tabPanel(
-                                 "Lavadero"
-                               ),
-                               tabPanel(
-                                 "Termo eléctrico y aire acondicionado"
-                               ),
-                               tabPanel(
-                                 "Energía global"
-                               )
-                             ),
-                             
-                           
-                    ),
-                    tabPanel("Anual"
-                             )
-                )
-
-)
+                          ),
+                        
+                          br(),hr(),br(),
+                          includeHTML("html/footer.html")
+                        ),
+                        tabPanel(
+                          "Lavadero"
+                        ),
+                        tabPanel(
+                          "Termo eléctrico y aire acondicionado"
+                        )
+                      ),
+                      
+                      
+             ),
+             tabPanel("Semanal")
+             )
+             
+           
 ))
 
 
   
+
 

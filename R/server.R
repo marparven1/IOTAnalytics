@@ -179,35 +179,56 @@ server <- function(input, output) {
 ##  Consumo energético diario ####  
 
   
-##### DatosRango<- Granularidad_dias%>%
-#####   pivot_longer(cols = c(7,8,9,10,11),
-#####                names_to = "Energia",
-#####                values_to = "valorEnergetico") %>% 
-#####   select(Date , Energia , valorEnergetico)
-##### 
-#####   
-##### fecha_seleccionada <- reactive({
-#####   req(input$dateRange)
-#####   validate(need(!is.na(input$dateRange[1]) & !is.na(input$dateRange[2]), "Error: Seleccione fecha de inicio y de fin."))
-#####   validate(need(input$dateRange[1] < input$dateRange[2], "Error: La fecha de inicio no debe ser previa a la fecha de fin."))
-#####   DatosRango  %>%
-#####     filter(
-#####       Energia == input$Submetering,
-#####       Date > input$dateRange[1] & Date < input$dateRange[2]
-#####       
-#####   )
-##### })
-#####   
-##### 
-#####   
-#####   ## ConsumoDiarioRango
-#####   
-#####   output$ConsumoDiarioRango <- renderPlotly({
-#####     plot(x =  fecha_seleccionada()$Date, y =   fecha_seleccionada()$valorEnergetico, type = "l",
-#####          xlab = "Date", ylab = "Trend index")
-#####   }) 
-#####   
+ DatosRango<- Granularidad_dias%>%
+   pivot_longer(cols = c(7,8,9,10,11),
+                names_to = "Energia",
+                values_to = "valorEnergetico") %>% 
+   select(Date , Energia , valorEnergetico)
+ 
+   
+ fecha_seleccionada <- reactive({
+   req(input$dateRange)
+   validate(need(!is.na(input$dateRange[1]) & !is.na(input$dateRange[2]), "Error: Seleccione fecha de inicio y de fin."))
+   validate(need(input$dateRange[1] < input$dateRange[2], "Error: La fecha de inicio no puede ser anterior a la fecha de fin."))
+   DatosRango  %>%
+     filter(
+       Energia == input$Submetering,
+       Date >  as.POSIXct( input$dateRange[1] )  & Date < as.POSIXct( input$dateRange[2] )
+       
+   )
+ })
+   ## ConsumoDiarioRango
+   
+    output$ConsumoDiarioRango <- renderPlot({
+      plot(x =  fecha_seleccionada()$Date, 
+           y =   fecha_seleccionada()$valorEnergetico,
+           type = "l",
+           xlab = "Fecha", 
+           ylab = "Energía (Vatios-Hora)", 
+           col = "red",
+           main="Evolución del consumo energético"
+           )
+    }) 
+   
   
+# output$ConsumoDiarioRango <- renderPlotly({
+#   
+#   fecha <- fecha_seleccionada()
+#   plot_ly(data = fecha,
+#           x=~fecha$Date,
+#           y = ~fecha$valorEnergetico,
+#           type = 'scatter',
+#           mode = 'lines',
+#           line=list(color='rgb(199, 0, 57 )')
+#   ) %>% 
+#     layout(title = "Evolución del consumo energético anual",
+#            xaxis = list(title = "Fecha"
+#                        #  ,
+#                        #  ticktext = list("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"), 
+#                        #  tickvals = fecha_seleccionada()$Date
+#                         ),
+#            yaxis = list (title = "Energía (Varios-hora)"))
+# }) 
   
   
   
@@ -227,7 +248,8 @@ output$ConsumoMensual <- renderPlotly({
   
   plot_line <- PorcData() 
   
-  plot_ly(x=~plot_line$`Date-MY`,
+  plot_ly(
+    x=~plot_line$`Date-MY`,
           y = ~plot_line$Sub_metering_1,
           type = 'scatter',mode = 'lines+markers',name="Cocina",
           line=list(color='rgb(199, 0, 57 )'),marker = list(color =   'rgb(199, 0, 57  )')
@@ -560,9 +582,7 @@ output$Prueba2  <- renderPlotly({
   
   pieAnualHoraDatos1 <- reactive({
     Tit<-c("Cocina","Lavadero","Termo eléctrico","global_active_power","energia2")
-    Uno<-Granularidad_horas  %>% filter(year == input$AnoPieAnualPorHora &
-                                          day == input$DiaPieAnualPorHora & 
-                                          month == input$MesPieAnualPorHora &
+    Uno<-Granularidad_horas  %>% filter( Date==input$DatePie &
                                           (hour==0 | hour==1 | hour==2 | hour==3 | hour==4 | hour==5  ) ) 
     Uno<-data.frame(Tit, apply(Uno[,c(11,12,13,14,15)],2,sum) )
     data.frame(key=c("Cocina","Lavadero","Termo eléctrico","No submeterizados"),
@@ -596,21 +616,33 @@ output$Prueba2  <- renderPlotly({
 
 # inputs DiaPieAnualPorHora MesPieAnualPorHora AnoPieAnualPorHora
 
-pieAnualHoraDatos2 <- reactive({
-  Tit<-c("Cocina","Lavadero","Termo eléctrico","global_active_power","energia2")
-  Dos<-Granularidad_horas  %>% filter(year == input$AnoPieAnualPorHora &
-                                        day == input$DiaPieAnualPorHora & 
-                                        month == input$MesPieAnualPorHora &
-                                        (hour==7 | hour==8 | hour==9 | hour==10 | hour==11 | hour==6)  ) 
-  Dos<-data.frame(Tit, apply(Dos[,c(11,12,13,14,15)],2,sum) )
-  data.frame(key=c("Cocina","Lavadero","Termo eléctrico","No submeterizados"),
-             value=c(round((Dos[1,2]/Dos[4,2])*100,2),
-                     round((Dos[2,2]/Dos[4,2])*100,2),
-                     round((Dos[3,2]/Dos[4,2])*100,2),
-                     round((Dos[5,2]/Dos[4,2])*100,2)
-             ))
-})
-
+# pieAnualHoraDatos2 <- reactive({
+#   Tit<-c("Cocina","Lavadero","Termo eléctrico","global_active_power","energia2")
+#   Dos<-Granularidad_horas  %>% filter(year == input$AnoPieAnualPorHora &
+#                                         day == input$DiaPieAnualPorHora & 
+#                                         month == input$MesPieAnualPorHora &
+#                                         (hour==7 | hour==8 | hour==9 | hour==10 | hour==11 | hour==6)  ) 
+#   Dos<-data.frame(Tit, apply(Dos[,c(11,12,13,14,15)],2,sum) )
+#   data.frame(key=c("Cocina","Lavadero","Termo eléctrico","No submeterizados"),
+#              value=c(round((Dos[1,2]/Dos[4,2])*100,2),
+#                      round((Dos[2,2]/Dos[4,2])*100,2),
+#                      round((Dos[3,2]/Dos[4,2])*100,2),
+#                      round((Dos[5,2]/Dos[4,2])*100,2)
+#              ))
+# })
+# 
+  pieAnualHoraDatos2 <- reactive({
+    Tit<-c("Cocina","Lavadero","Termo eléctrico","global_active_power","energia2")
+    Dos<-Granularidad_horas  %>% filter(   Date==input$DatePie &
+                                          (hour==7 | hour==8 | hour==9 | hour==10 | hour==11 | hour==6)  ) 
+    Dos<-data.frame(Tit, apply(Dos[,c(11,12,13,14,15)],2,sum) )
+    data.frame(key=c("Cocina","Lavadero","Termo eléctrico","No submeterizados"),
+               value=c(round((Dos[1,2]/Dos[4,2])*100,2),
+                       round((Dos[2,2]/Dos[4,2])*100,2),
+                       round((Dos[3,2]/Dos[4,2])*100,2),
+                       round((Dos[5,2]/Dos[4,2])*100,2)
+               ))
+  })
 
 
 
@@ -637,9 +669,7 @@ output$PieAnualPorHora2 <- renderPlotly({
 
 pieAnualHoraDatos3 <- reactive({
   Tit<-c("Cocina","Lavadero","Termo eléctrico","global_active_power","energia2")
-  Tres<-Granularidad_horas  %>% filter(year == input$AnoPieAnualPorHora &
-                                        day == input$DiaPieAnualPorHora & 
-                                        month == input$MesPieAnualPorHora &
+  Tres<-Granularidad_horas  %>% filter( Date==input$DatePie &
                                          (hour==13 | hour==14 | hour==15 | hour==16 | hour==17 | hour==12)  ) 
   Tres<-data.frame(Tit, apply(Tres[,c(11,12,13,14,15)],2,sum) )
   data.frame(key=c("Cocina","Lavadero","Termo eléctrico","No submeterizados"),
@@ -678,9 +708,7 @@ output$PieAnualPorHora3 <- renderPlotly({
 
 pieAnualHoraDatos4 <- reactive({
   Tit<-c("Cocina","Lavadero","Termo eléctrico","global_active_power","energia2")
-  Cuatro<-Granularidad_horas  %>% filter(year == input$AnoPieAnualPorHora &
-                                         day == input$DiaPieAnualPorHora & 
-                                         month == input$MesPieAnualPorHora &
+  Cuatro<-Granularidad_horas  %>% filter( Date==input$DatePie &
                                          (hour==18 | hour==19 | hour==20 | hour==21 | hour==22 | hour==23)  ) 
   Cuatro<-data.frame(Tit, apply(Cuatro[,c(11,12,13,14,15)],2,sum) )
   data.frame(key=c("Cocina","Lavadero","Termo eléctrico","No submeterizados"),

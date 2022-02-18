@@ -1,39 +1,153 @@
-<html>
+<!doctype html>
+<html lang="es">
 
 <head>
+  <meta charset="utf-8">
+  <!-- Bootstrap CSS -->
+ 
 <title>Descripción de los datos de consumo energético</title>
 </head>
 
 <body>
 <FONT SIZE=4>
 <h1>Descripción de los datos</h1>
-
+<div>
 <p>Nuestros datos contienen información sobre mediciones de energía de una casa en Sceaux (7km of Paris, France) 
 en los meses de Diciembre de 2006 a Noviembre de 2010 (47 meses). Contiene un total de 2075259 medidas en 10 
-varaibles que explicaremos a continuación.</p>
+variables que explicaremos a continuación.</p>
+</div>
+</br>
+<!--
 
 <div class="panel-group transparent-panel-group" >
         <div class="panel panel-default">
-        
-
             <div class="panel-body text-left">
-            <h4>Variables del dataset</h4>
+          <h1 class="w3-center">Variables</h1>
             </br>
-              <ul>
-                      <li>Date: Fecha en formato dd/mm/yyyy</li>
-                      <li>Time: Hora en formato hh:mm:ss</li>
-                      <li>global_active_power: potencia activa media global por minuto en el hogar (kw). Es la potencia “útil”, la que consumen los equípos eléctricos</li>
-                      <li>global_reactive_power: potencia reactiva media global por minuto en el hogar (kw)</li>
-                      <li>voltage: Voltaje medio por minuto (voltios)</li>
-                      <li>global_intensity: Intensidad media de corriente por minuto en el hogar (amperios) household global minute-averaged current intensity (in ampere)</li>
-                      <li> sub_metering_1: energía registrada por el submedidor 1 (Wh de energía activa). Corresponde a: <ul><li> Cocina: lavavajillas, horno microondas (no placas de inducción)</li></ul>  </li>
-                      <li> sub_metering_1: energía registrada por el submedidor 2 (Wh de energía activa). Corresponde a: <ul><li>Lavadero: que contiene lavadora, secadora, frigorífico y luz</li> </ul></li>
-                      <li> sub_metering_1: energía registrada por el submedidor 3 (Wh de energía activa). Corresponde a: <ul><li>Termo eléctrico y aire acondicionado</li></ul></li>
+              <ul class="list-group list-group-flush">
+  <li class="list-group-item">Date: Fecha en formato dd/mm/yyyy  </li>
+  <li class="list-group-item">Time: Hora en formato hh:mm:ss</li>
+  <li class="list-group-item">global_active_power: potencia activa media global por minuto en el hogar (kw). Es la potencia “útil”, la que consumen los equípos eléctricos</li>
+  <li class="list-group-item">global_reactive_power: potencia reactiva media global por minuto en el hogar (kw)                                                           </li>
+  <li class="list-group-item">global_intensity: Intensidad media de corriente por minuto en el hogar (amperios) household global minute-averaged current intensity (in ampere)</li>
+  <li class="list-group-item">sub_metering_1: energía registrada por el submedidor 1 (Wh de energía activa). Corresponde a: <ul><li> Cocina: lavavajillas, horno microondas (no placas de inducción)</li></ul></li>
+  <li class="list-group-item"> sub_metering_2: energía registrada por el submedidor 2 (Wh de energía activa). Corresponde a: <ul><li>Lavadero: que contiene lavadora, secadora, frigorífico y luz</li> </ul></li>
+  <li class="list-group-item"> sub_metering_1: energía registrada por el submedidor 3 (Wh de energía activa). Corresponde a: <ul><li>Termo eléctrico y aire acondicionado</li></ul></li>
 
-              </ul>
+</ul>
             </div>
         </div>
       </div>
+      
+-->
+      
+<div class="panel-group transparent-panel-group" >
+
+<div class="w3-row w3-container row app-links">
+
+
+<h1 class="w3-center">Fecha y hora</h1>
+</br>
+  <div class="w3-col s4  w3-center">
+ <img src="rojo.jpeg" alt="Uno"> 
+    <h2>Date</h2>
+    <p>Fecha</p>
+  </div>
+  
+    <div class="w3-col s4  w3-center">
+
+   <p>  <p>
+  </div>
+  
+  
+  <div class="w3-col s4  w3-center">
+<img src="rojo.jpeg" alt="Dos">
+    <h2>Time</h2>
+    <p>Hora</p>
+  </div>
+  
+</div>
+
+
+<div class="w3-row w3-container row app-links">
+<h1 class="w3-center">Energía</h1>
+</br>
+
+<div class="w3-col s4  w3-center">
+    <img   src="rojo.jpeg" alt="Tres">
+    <h2>Global Active Power</h2>
+    <p>potencia activa media global por minuto en el hogar (kw). Es la potencia “útil”, la que consumen los equípos eléctricos</p>
+  </div>
+  
+  <div class="w3-col s4  w3-center">
+    <img   src="rojo.jpeg" alt="Tres">
+    <h2>Global Reactive Power</h2>
+    <p>Potencia activa media global por minuto en el hogar (kw). Es la potencia “útil”, la que consumen los equípos eléctricos</p>
+  </div>
+  
+  <div class="w3-col s4  w3-center">
+    <img   src="rojo.jpeg" alt="Tres">
+    <h2>Global active power</h2>
+    <p>Potencia reactiva media global por minuto en el hogar (kw)</p>
+  </div>
+
+</div>
+
+  </br>
+
+<div class="w3-row w3-container row app-links">
+
+ <div class="w3-col s4  w3-center">
+    <img   src="rojo.jpeg" alt="Tres">
+    <h2>Global intensity</h2>
+    <p >Intensidad media de corriente por minuto en el hogar (amperios) household global minute-averaged current intensity (in ampere)</p>
+  </div>
+  
+  <div class="w3-col s4  w3-center">
+   <p> -  <p>
+  </div>
+  
+  </br>
+  
+   <div class="w3-col s4  w3-center">
+    <img   src="rojo.jpeg" alt="Tres">
+    <h2>Energía no submeterizada</h2>
+    <p>Potencia activa no submeterizada por minuto en el hogar (vatios-hora)</p>
+  </div>
+</div>
+
+  </br>
+
+<div class="w3-row w3-container row app-links">
+<h1 class="w3-center">Submedición eléctrica</h1>
+  </br>
+<div class="w3-col s4  w3-center">
+    <img   src="rojo.jpeg" alt="Tres">
+    <h2>Submetering 1</h2>
+    <p>Energía registrada por el submedidor 1 en la cocina (Wh de energía activa)</p>
+     <p>Cocina: lavavajillas, horno microondas (no placas de inducción)</p>
+  </div>
+  
+  <div class="w3-col s4  w3-center">
+    <img   src="rojo.jpeg" alt="Tres">
+    <h2>Submetering 2</h2>
+    <p>Energía registrada por el submedidor 2 en el lavadero (Wh de energía activa)</p>
+     <p>Lavadora, secadora, frigorífico y luz</p>
+  </div>
+  
+  <div class="w3-col s4  w3-center">
+    <img   src="rojo.jpeg" alt="Tres">
+    <h2>Submetering 3</h2>
+    <p>Energía registrada por el submedidor 3.(Wh de energía activa)</p>
+     <p>Aire acondicionado y termo eléctrico</p>
+  </div>
+</div>
+
+
+
+
+
+</div>
 
 
 </font>

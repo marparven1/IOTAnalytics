@@ -20,6 +20,4 @@ load(file="data/DF_Energia_GMensual.RData")
 source("R/ui.R")
 source("R/server.R")
 
-
-
 shinyApp(ui = ui,server=server)
