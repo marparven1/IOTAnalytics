@@ -202,11 +202,12 @@ server <- function(input, output) {
     output$ConsumoDiarioRango <- renderPlot({
       plot(x =  fecha_seleccionada()$Date, 
            y =   fecha_seleccionada()$valorEnergetico,
-           type = "l",
+           type = "b",
            xlab = "Fecha", 
            ylab = "Energía (Vatios-Hora)", 
            col = "red",
-           main="Evolución del consumo energético"
+           main="Evolución del consumo energético",
+           sub = "Se muestra para cada día la energía total consumida ese día"
            )
     }) 
    
@@ -543,6 +544,288 @@ output$Prueba2  <- renderPlotly({
 
   
 # Piecharts ####
+### Pie TOTAL ####
+# PieTotal ####
+
+
+pieGlobalDatos <- reactive({
+  Gda<- data.frame(
+    
+    energiaTotal<-sum(DatosCompletos$Global_active_power),
+    sm1<-sum(DatosCompletos$Sub_metering_1),
+    sm2<-sum(DatosCompletos$Sub_metering_2),
+    sm3<-sum(DatosCompletos$Sub_metering_3),
+    en2<-sum(DatosCompletos$energia2)
+    
+  ) %>% gather()
+  
+  data.frame(key=c("Cocina","Lavadero","Termo eléct & aire acond","Resto de la casa"),
+             value=c(round((Gda[2,2]/Gda[1,2])*100,2),
+                     round((Gda[3,2]/Gda[1,2])*100,2),
+                     round((Gda[4,2]/Gda[1,2])*100,2),
+                     round((Gda[5,2]/Gda[1,2])*100,2)
+             ))
+  
+})
+
+output$PieTotal <- renderPlotly({
+  
+  plot_Pie <-pieGlobalDatos() 
+  plot_ly(plot_Pie,
+          labels = ~key, values = ~value, type = 'pie',
+          textposition = 'inside',
+          textinfo = 'label+percent',
+          hoverinfo = 'text',showlegend = FALSE,
+          marker = list(colors = c("#CD3333","#EE7621","#548B54","#1874CD"),
+                        line = list(color = '#FFFFFF', width = 1))) %>%
+    layout(title = 'Porcentaje del consumo energético',
+           xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+           yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+  
+  
+})
+
+
+
+
+#### Pie Invierno y Verano ####
+#   "PieVerano" , "PieInvierno"
+#### Invierno ####
+
+
+#### Data ####
+DatosInvierno7 <- reactive({
+  PorcMensualinvierno<-Granularidad_meses %>% 
+    filter(month==1 | month==2) %>% 
+    summarize(
+      Sub_metering_1=sum(Sub_metering_1),
+      Sub_metering_2=sum(Sub_metering_2),
+      Sub_metering_3=sum(Sub_metering_3),
+      energia2=sum(energia2)
+    )
+  Anual7Invierno<-PorcMensualinvierno[1,-1] %>% gather()
+  Anual7Invierno$key<-c("Cocina","Lavadero","Termo eléctrico y AC","Resto de la casa")
+  Anual7Invierno
+})
+
+
+DatosInvierno8 <- reactive({
+  PorcMensualinvierno<-Granularidad_meses %>% 
+    filter(month==1 | month==2) %>% 
+    summarize(
+      Sub_metering_1=sum(Sub_metering_1),
+      Sub_metering_2=sum(Sub_metering_2),
+      Sub_metering_3=sum(Sub_metering_3),
+      energia2=sum(energia2)
+    )
+  Anual8Invierno<-PorcMensualinvierno[2,-1] %>% gather()
+  Anual8Invierno$key<-c("Cocina","Lavadero","Termo eléctrico y AC","Resto de la casa")
+  Anual8Invierno
+})
+
+DatosInvierno9 <- reactive({
+  PorcMensualinvierno<-Granularidad_meses %>% 
+    filter(month==1 | month==2) %>% 
+    summarize(
+      Sub_metering_1=sum(Sub_metering_1),
+      Sub_metering_2=sum(Sub_metering_2),
+      Sub_metering_3=sum(Sub_metering_3),
+      energia2=sum(energia2)
+    )
+  Anual9Invierno<-PorcMensualinvierno[3,-1] %>% gather()
+  Anual9Invierno$key<-c("Cocina","Lavadero","Termo eléctrico y AC","Resto de la casa")
+  Anual9Invierno
+})
+
+DatosInvierno10 <- reactive({
+  PorcMensualinvierno<-Granularidad_meses %>% 
+    filter(month==1 | month==2) %>% 
+    summarize(
+      Sub_metering_1=sum(Sub_metering_1),
+      Sub_metering_2=sum(Sub_metering_2),
+      Sub_metering_3=sum(Sub_metering_3),
+      energia2=sum(energia2)
+    )
+  Anual10Invierno<-PorcMensualinvierno[4,-1] %>% gather()
+  Anual10Invierno$key<-c("Cocina","Lavadero","Termo eléctrico y AC","Resto de la casa")
+  Anual10Invierno
+})
+
+
+#### Gráfico ####
+
+
+output$PieInvierno1 <- renderPlotly({
+  plot_PieInvierno7 <- DatosInvierno7() 
+  plot_PieInvierno8 <- DatosInvierno8() 
+  fig <- plot_ly()
+  fig <- fig %>% add_pie(data = plot_PieInvierno7, labels = ~key, values = ~value,
+                         title = 'Año 2007',
+                         name = "Cut", domain = list(row = 0, column = 0), showlegend=FALSE,
+                         marker = list(colors = c("#CD3333","#EE7621","#548B54","#1874CD"),
+                                       line = list(color = '#FFFFFF', width = 1)))
+  fig <- fig %>% add_pie(data = plot_PieInvierno8, labels = ~key, values = ~value, title = 'Año 2008',
+                         name = "Color", domain = list(row = 1, column = 0), showlegend=FALSE,
+                         marker = list(colors = c("#CD3333","#EE7621","#548B54","#1874CD"),
+                                       line = list(color = '#FFFFFF', width = 1)))
+  fig <- fig %>% layout(showlegend = T,
+                        grid=list(rows=2, columns=1),
+                        xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                        yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+  
+  fig
+
+})
+
+output$PieInvierno2 <- renderPlotly({
+
+ plot_PieInvierno9 <- DatosInvierno9() 
+ plot_PieInvierno10 <- DatosInvierno10() 
+  
+  
+  fig <- plot_ly()
+  fig <- fig %>% add_pie(data = plot_PieInvierno9, labels = ~key, values = ~value,
+                         title = 'Año 2009',
+                         name = "Cut", domain = list(row = 0, column = 0),
+                         marker = list(colors = c("#CD3333","#EE7621","#548B54","#1874CD"),
+                                       line = list(color = '#FFFFFF', width = 1)))
+  fig <- fig %>% add_pie(data = plot_PieInvierno10, labels = ~key, values = ~value, title = 'Año 2010',
+                         name = "Color", domain = list(row = 1, column = 0),
+                         marker = list(colors = c("#CD3333","#EE7621","#548B54","#1874CD"),
+                                       line = list(color = '#FFFFFF', width = 1)))
+  fig <- fig %>% layout( showlegend = T,
+                        grid=list(rows=2, columns=1),
+                        xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                        yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+  
+  fig
+  
+})
+
+
+
+
+
+#### Verano ####
+#### Data ####
+
+DatosVerano7 <- reactive({
+  PorcMensualVerano<-Granularidad_meses %>% 
+    filter(month==7 | month==8) %>% 
+    summarize(
+      Sub_metering_1=sum(Sub_metering_1),
+      Sub_metering_2=sum(Sub_metering_2),
+      Sub_metering_3=sum(Sub_metering_3),
+      energia2=sum(energia2)
+    )
+  Anual7Verano<-PorcMensualVerano[1,-1] %>% gather()
+  Anual7Verano$key<-c("Cocina","Lavadero","Termo eléctrico y AC","Resto de la casa")
+  Anual7Verano
+})
+
+
+DatosVerano8 <- reactive({
+  PorcMensualVerano<-Granularidad_meses %>% 
+    filter(month==8 | month==7) %>% 
+    summarize(
+      Sub_metering_1=sum(Sub_metering_1),
+      Sub_metering_2=sum(Sub_metering_2),
+      Sub_metering_3=sum(Sub_metering_3),
+      energia2=sum(energia2)
+    )
+  Anual8Verano<-PorcMensualVerano[2,-1] %>% gather()
+  Anual8Verano$key<-c("Cocina","Lavadero","Termo eléctrico y AC","Resto de la casa")
+  Anual8Verano
+})
+
+DatosVerano9 <- reactive({
+  PorcMensualVerano<-Granularidad_meses %>% 
+    filter(month==7 | month==8) %>% 
+    summarize(
+      Sub_metering_1=sum(Sub_metering_1),
+      Sub_metering_2=sum(Sub_metering_2),
+      Sub_metering_3=sum(Sub_metering_3),
+      energia2=sum(energia2)
+    )
+  Anual9Verano<-PorcMensualVerano[3,-1] %>% gather()
+  Anual9Verano$key<-c("Cocina","Lavadero","Termo eléctrico y AC","Resto de la casa")
+  Anual9Verano
+})
+
+DatosVerano10 <- reactive({
+  PorcMensualVerano<-Granularidad_meses %>% 
+    filter(month==7 | month==8.) %>% 
+    summarize(
+      Sub_metering_1=sum(Sub_metering_1),
+      Sub_metering_2=sum(Sub_metering_2),
+      Sub_metering_3=sum(Sub_metering_3),
+      energia2=sum(energia2)
+    )
+  Anual10Verano<-PorcMensualVerano[4,-1] %>% gather()
+  Anual10Verano$key<-c("Cocina","Lavadero","Termo eléctrico y AC","Resto de la casa")
+  Anual10Verano
+})
+
+
+
+#### Gráfico ####
+
+output$PieVerano1 <- renderPlotly({
+  plot_PieVerano7 <- DatosInvierno7() 
+  plot_PieVerano8 <- DatosInvierno8() 
+  fig <- plot_ly()
+  fig <- fig %>% add_pie(data = plot_PieVerano7, labels = ~key, values = ~value,
+                         title = 'Año 2007',
+                         name = "Cut", domain = list(row = 0, column = 0), showlegend=FALSE,
+                         marker = list(colors = c("#CD3333","#EE7621","#548B54","#1874CD"),
+                                       line = list(color = '#FFFFFF', width = 1)))
+  fig <- fig %>% add_pie(data = plot_PieVerano8, labels = ~key, values = ~value, title = 'Año 2008',
+                         name = "Color", domain = list(row = 1, column = 0), showlegend=FALSE,
+                         marker = list(colors = c("#CD3333","#EE7621","#548B54","#1874CD"),
+                                       line = list(color = '#FFFFFF', width = 1)))
+  fig <- fig %>% layout(showlegend = T,
+                        grid=list(rows=2, columns=1),
+                        xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                        yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+  
+  fig
+  
+})
+
+output$PieVerano2 <- renderPlotly({
+  
+  plot_PieVerano9 <-  DatosVerano9() 
+  plot_PieVerano10 <- DatosVerano10() 
+  
+  
+  fig <- plot_ly()
+  fig <- fig %>% add_pie(data = plot_PieVerano9, labels = ~key, values = ~value,
+                         title = 'Año 2009',
+                         name = "Cut", domain = list(row = 0, column = 0),
+                         marker = list(colors = c("#CD3333","#EE7621","#548B54","#1874CD"),
+                                       line = list(color = '#FFFFFF', width = 1)))
+  fig <- fig %>% add_pie(data = plot_PieVerano10, labels = ~key, values = ~value, title = 'Año 2010',
+                         name = "Color", domain = list(row = 1, column = 0),
+                         marker = list(colors = c("#CD3333","#EE7621","#548B54","#1874CD"),
+                                       line = list(color = '#FFFFFF', width = 1)))
+  fig <- fig %>% layout( showlegend = T,
+                         grid=list(rows=2, columns=1),
+                         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+  
+  fig
+  
+})
+
+
+
+
+
+
+
+
+
+
 
 
 ## Pie Chart Anual ####
@@ -551,7 +834,7 @@ output$Prueba2  <- renderPlotly({
       filter(year ==  input$AnoPieAnual & month == input$MesPieAnual & day == input$DiaPieAnual ) %>% 
       select(c(7,8,9,10,11) ) %>% gather() ) 
     
-    data.frame(key=c("Cocina","Lavadero","Termo eléctrico","No submeterizados"),
+    data.frame(key=c("Cocina","Lavadero","Termo eléct & aire acond","Resto de la casa"),
                                       value=c(round((Gda[3,2]/Gda[6,2])*100,2),
                                               round((Gda[4,2]/Gda[6,2])*100,2),
                                               round((Gda[5,2]/Gda[6,2])*100,2),
@@ -567,13 +850,104 @@ output$Prueba2  <- renderPlotly({
             labels = ~key, values = ~value, type = 'pie',
             textposition = 'inside',
             textinfo = 'label+percent',
-            hoverinfo = 'text',showlegend = FALSE) %>%
-      layout(title = 'Porcentaje del consumo energético',
+            hoverinfo = 'text',showlegend = FALSE,
+            marker = list(colors = c("#CD3333","#EE7621","#548B54","#1874CD"),
+                          line = list(color = '#FFFFFF', width = 1))) %>%
+      layout(title = 'Porcentaje del consumo energético un día concreto',
                  xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
                  yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
 
     
   })
+  
+  
+
+  
+  
+## Pie mensual global ####
+# input$MesAno  output$PieMensual
+
+  
+  DatosDeMes<- reactive({
+    Mes <- data.frame(
+    Granularidad_meses %>% group_by(month) %>% 
+      summarize(
+        Sub_metering_1=sum(Sub_metering_1),
+        Sub_metering_2=sum(Sub_metering_2),
+        Sub_metering_3=sum(Sub_metering_3),
+        energia2=sum(energia2),
+        Global_active_power=sum(Global_active_power)
+      ) %>% filter(month==input$MesAno))
+  
+  data.frame(key=c("Cocina","Lavadero","Termo eléctrico y AC","Resto de la casa"),
+                           value=c(round((Mes[1,2]/Mes[1,6])*100,2),
+                                   round((Mes[1,3]/Mes[1,6])*100,2),
+                                   round((Mes[1,4]/Mes[1,6])*100,2),
+                                   round((Mes[1,5]/Mes[1,6])*100,2)
+                           ))
+  })
+  
+  output$PieMensual <- renderPlotly({
+    PieMesDf<-DatosDeMes()
+    fig <- plot_ly(PieMesDf, labels = ~key, values = ~value, type = 'pie',
+                   textposition = 'inside',
+                   textinfo = 'label+percent',
+                   hoverinfo = 'text',showlegend = FALSE,
+                   marker = list(colors = c("#CD3333","#EE7621","#548B54","#1874CD"),
+                                 line = list(color = '#FFFFFF', width = 1))
+    )
+    fig <- fig %>% layout( title = 'Porcentaje del consumo energético mensual',
+                           xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                           yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+    
+    fig
+  })
+  
+  
+  
+  
+  
+## Pie mensual por año ####
+  # input$MesAno2  output$PieMensual2
+  
+  DatosDeMesYano<- reactive({
+    Mes <- data.frame(
+      Granularidad_meses %>% filter(year== input$AnoPie2) %>% 
+        group_by(month) %>% 
+        summarize(
+          Sub_metering_1=sum(Sub_metering_1),
+          Sub_metering_2=sum(Sub_metering_2),
+          Sub_metering_3=sum(Sub_metering_3),
+          energia2=sum(energia2),
+          Global_active_power=sum(Global_active_power)
+        ) %>% filter(month==input$MesAno2))
+    
+    data.frame(key=c("Cocina","Lavadero","Termo eléctrico y AC","Resto de la casa"),
+               value=c(round((Mes[1,2]/Mes[1,6])*100,2),
+                       round((Mes[1,3]/Mes[1,6])*100,2),
+                       round((Mes[1,4]/Mes[1,6])*100,2),
+                       round((Mes[1,5]/Mes[1,6])*100,2)
+               ))
+  })
+  
+  output$PieMensualAno <- renderPlotly({
+    PieMesDf<-DatosDeMesYano()
+    fig <- plot_ly(PieMesDf, labels = ~key, values = ~value, type = 'pie',
+                   textposition = 'inside',
+                   textinfo = 'label+percent',
+                   hoverinfo = 'text',showlegend = FALSE,
+                   marker = list(colors = c("#CD3333","#EE7621","#548B54","#1874CD"),
+                                 line = list(color = '#FFFFFF', width = 1))
+                   )
+    fig <- fig %>% layout( title = 'Porcentaje del consumo energético mensual para un año concreto',
+                           xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                           yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+    
+    fig
+  })
+  
+  
+  
   
 ### Pie chart por horas ####
 #### Primera ####
@@ -581,11 +955,11 @@ output$Prueba2  <- renderPlotly({
 # inputs DiaPieAnualPorHora MesPieAnualPorHora AnoPieAnualPorHora
   
   pieAnualHoraDatos1 <- reactive({
-    Tit<-c("Cocina","Lavadero","Termo eléctrico","global_active_power","energia2")
+    Tit<-c("Cocina","Lavadero","Termo eléctrico y aire acondicionado","Energía total","Resto de la casa")
     Uno<-Granularidad_horas  %>% filter( Date==input$DatePie &
                                           (hour==0 | hour==1 | hour==2 | hour==3 | hour==4 | hour==5  ) ) 
     Uno<-data.frame(Tit, apply(Uno[,c(11,12,13,14,15)],2,sum) )
-    data.frame(key=c("Cocina","Lavadero","Termo eléctrico","No submeterizados"),
+    data.frame(key=c("Cocina","Lavadero","Termo eléctrico y aire acondicionado","Resto de la casa"),
                     value=c(round((Uno[1,2]/Uno[4,2])*100,2),
                             round((Uno[2,2]/Uno[4,2])*100,2),
                             round((Uno[3,2]/Uno[4,2])*100,2),
@@ -632,11 +1006,11 @@ output$Prueba2  <- renderPlotly({
 # })
 # 
   pieAnualHoraDatos2 <- reactive({
-    Tit<-c("Cocina","Lavadero","Termo eléctrico","global_active_power","energia2")
+    Tit<-c("Cocina","Lavadero","Termo eléctrico y aire acondicionado","Energía total","Resto de la casa")
     Dos<-Granularidad_horas  %>% filter(   Date==input$DatePie &
                                           (hour==7 | hour==8 | hour==9 | hour==10 | hour==11 | hour==6)  ) 
     Dos<-data.frame(Tit, apply(Dos[,c(11,12,13,14,15)],2,sum) )
-    data.frame(key=c("Cocina","Lavadero","Termo eléctrico","No submeterizados"),
+    data.frame(key=c("Cocina","Lavadero","Termo eléctrico y aire acondicionado","Resto de la casa"),
                value=c(round((Dos[1,2]/Dos[4,2])*100,2),
                        round((Dos[2,2]/Dos[4,2])*100,2),
                        round((Dos[3,2]/Dos[4,2])*100,2),
@@ -668,11 +1042,11 @@ output$PieAnualPorHora2 <- renderPlotly({
 # inputs DiaPieAnualPorHora MesPieAnualPorHora AnoPieAnualPorHora
 
 pieAnualHoraDatos3 <- reactive({
-  Tit<-c("Cocina","Lavadero","Termo eléctrico","global_active_power","energia2")
+  Tit<-c("Cocina","Lavadero","Termo eléctrico y aire acondicionado","Energía total","Resto de la casa")
   Tres<-Granularidad_horas  %>% filter( Date==input$DatePie &
                                          (hour==13 | hour==14 | hour==15 | hour==16 | hour==17 | hour==12)  ) 
   Tres<-data.frame(Tit, apply(Tres[,c(11,12,13,14,15)],2,sum) )
-  data.frame(key=c("Cocina","Lavadero","Termo eléctrico","No submeterizados"),
+  data.frame(key=c("Cocina","Lavadero","Termo eléctrico y aire acondicionado","Resto de la casa"),
              value=c(round((Tres[1,2]/Tres[4,2])*100,2),
                      round((Tres[2,2]/Tres[4,2])*100,2),
                      round((Tres[3,2]/Tres[4,2])*100,2),
@@ -707,11 +1081,11 @@ output$PieAnualPorHora3 <- renderPlotly({
 # inputs DiaPieAnualPorHora MesPieAnualPorHora AnoPieAnualPorHora
 
 pieAnualHoraDatos4 <- reactive({
-  Tit<-c("Cocina","Lavadero","Termo eléctrico","global_active_power","energia2")
+  Tit<-c("Cocina","Lavadero","Termo eléctrico y aire acondicionado","Energía total","Resto de la casa")
   Cuatro<-Granularidad_horas  %>% filter( Date==input$DatePie &
                                          (hour==18 | hour==19 | hour==20 | hour==21 | hour==22 | hour==23)  ) 
   Cuatro<-data.frame(Tit, apply(Cuatro[,c(11,12,13,14,15)],2,sum) )
-  data.frame(key=c("Cocina","Lavadero","Termo eléctrico","No submeterizados"),
+  data.frame(key=c("Cocina","Lavadero","Termo eléctrico y aire acondicionado","Resto de la casa"),
              value=c(round((Cuatro[1,2]/Cuatro[4,2])*100,2),
                      round((Cuatro[2,2]/Cuatro[4,2])*100,2),
                      round((Cuatro[3,2]/Cuatro[4,2])*100,2),
@@ -730,7 +1104,9 @@ output$PieAnualPorHora4 <- renderPlotly({
           labels = ~key, values = ~value, type = 'pie',title = '18-23 h',
           textposition = 'inside',
           textinfo = 'label+percent',
-          hoverinfo = 'text',showlegend = FALSE) %>%
+          hoverinfo = 'text',showlegend = FALSE
+         
+          ) %>%
     layout(
            xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
            yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
@@ -749,13 +1125,22 @@ output$Prueba <- renderPlotly({
   fig <- plot_ly()
   fig <- fig %>% add_pie(data = plot_PieHoras1, labels = ~key, values = ~value,
                          title = '0-5 h',
-                         name = "Cut", domain = list(row = 0, column = 0))
+                         name = "Cut", domain = list(row = 0, column = 0),
+                         marker = list(colors = c("#CD3333","#EE7621","#548B54","#1874CD"),
+                                       line = list(color = '#FFFFFF', width = 1)))
   fig <- fig %>% add_pie(data = plot_PieHoras2, labels = ~key, values = ~value, title = '6-12 h',
-                         name = "Color", domain = list(row = 0, column = 1))
+                         name = "Color", domain = list(row = 0, column = 1),
+                         marker = list(colors = c("#CD3333","#EE7621","#548B54","#1874CD"),
+                                       line = list(color = '#FFFFFF', width = 1)))
   fig <- fig %>% add_pie(data = plot_PieHoras3, ~key, values = ~value, title = '13-17 h',
-                         name = "Clarity", domain = list(row = 1, column = 0))
+                         name = "Clarity", domain = list(row = 1, column = 0),
+                         marker = list(colors = c("#CD3333","#EE7621","#548B54","#1874CD"),
+                                       line = list(color = '#FFFFFF', width = 1)))
   fig <- fig %>% add_pie(data = plot_PieHoras4, ~key, values = ~value, title = '18-23 h',
-                         name = "Clarity", domain = list(row = 1, column = 1))
+                         name = "Clarity", domain = list(row = 1, column = 1),
+                         marker = list(colors = c("#CD3333","#EE7621","#548B54","#1874CD"),
+                                       line = list(color = '#FFFFFF', width = 1))
+                         )
   fig <- fig %>% layout( showlegend = T,
                         grid=list(rows=2, columns=2),
                         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
@@ -764,6 +1149,55 @@ output$Prueba <- renderPlotly({
   fig
   
 })
+
+
+
+
+
+
+### Pie Un año completo ####
+
+# output$PieUnAno,input$AnoPie
+
+pieAnualS <- reactive({
+  
+  GdaII <- data.frame(
+    Granularidad_meses %>% group_by(year) %>% filter(year==input$AnoPie) %>% 
+    summarize(
+      Sub_metering_1=sum(Sub_metering_1),
+      Sub_metering_2=sum(Sub_metering_2),
+      Sub_metering_3=sum(Sub_metering_3),
+      energia2=sum(energia2),
+      Global_active_power=sum(Global_active_power)
+    ) %>% 
+      gather() )
+  
+  data.frame(key=c("Cocina","Lavadero","Termo eléctrico y AC","Resto de la casa"),
+             value=c(round((GdaII[2,2]/GdaII[6,2])*100,2),
+                     round((GdaII[3,2]/GdaII[6,2])*100,2),
+                     round((GdaII[4,2]/GdaII[6,2])*100,2),
+                     round((GdaII[5,2]/GdaII[6,2])*100,2)
+             ))
+  
+})
+
+output$PieUnAno <- renderPlotly({
+  
+  plot_PieS <- pieAnualS()
+  plot_ly(plot_PieS,
+          labels = ~key, values = ~value, type = 'pie',
+          textposition = 'inside',
+          textinfo = 'label+percent',
+          hoverinfo = 'text',showlegend = FALSE,
+          marker = list(colors = c("#CD3333","#EE7621","#548B54","#1874CD"),
+                        line = list(color = '#FFFFFF', width = 1))) %>%
+    layout(title = 'Porcentaje del consumo energético anual',
+           xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+           yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+  
+  
+})
+
 
 
 
