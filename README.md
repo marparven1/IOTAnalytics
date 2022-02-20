@@ -13,7 +13,7 @@ El proyecto tiene dos audiencias, una más técnica donde se expondrá con todo 
 
 - Fecha límite de entrega: 23-Feb-2022
 - Tareas a realizar (fases del proyecto):
-    
+
     - Lectura, descripción, preprocesado y extracción de los datos
     - Visualización 
     - Preprocesado y preparación de los datos 
@@ -31,11 +31,16 @@ El proyecto se ha ido realizando en distintos scripts, uno por cada apartado del
 
 Todo el contenido se encuentra dentro de la carpeta *Module4_Deep_Analytics* y se divide en diferentes archivos:
 
+### Presentación del proyecto
+
+En la carpeta **PresentacionProyecto** encontramos un archivo .ppt donde encontramos la descripción y presentación del proyecto para el cliente.
+
+
 ### Lectura, descripción, preprocesado y extracción de los datos
 
-Archivo: **ExtraccionY_Preprocesado_Datos.Rmd**
+Archivo: **ExtraccionY_Preprocesado_Datos.html**
 
-Descripción:
+Contenidos:
 
 - Breve explicación del proyecto y objetivos del estudio
 - Variables contenidas en los datos
@@ -56,10 +61,61 @@ Descripción:
 
 ### Visualización del consumo energético
 
-Archivo: 
+Archivo: **AnalisisExploratorio_Graficas.html**
+Contenidos:
+
+- Breve análisis exploratorio
+
+    - Descripción de los objetivos
+    - Resumen de los datos
+- Gráficas del consumo energético con diferentes granularidades:
+    
+    - Consumo energético diario por minuto
+    - Consumo energético semanal
+    - Consumo energético mensual
+    - Porcentaje de consumo energético (PieCharts):
+
+        - Global
+        - Diario por franja horaria
+        - Diario para un día concreto
+        - Anual
+        - Mensual
+        - Mensual para un año concreto
+        - Comparación para meses de invierno y verano
+- Conclusiones
 
 ### Análisis de series temporales 
 
+Archivo: **Analisis_Series_Temporales.html**
+Contenidos:
+
+- Objetivos
+- Estudio de los datos a través de una serie temporal:
+
+    - Creación de un archivo ts
+    - Visualización de la serie
+    - Pronóstico de la serie sin descomponer
+        
+        * Pronóstico
+        * Intervalo de confianza
+        * Resultados de la predicción (error y coeficiente R2)
+    - Descomposición de la serie temporal
+    - Visualización de la tendencia
+    - Suavizado exponencial de Holt-Winters
+    - Pronóstico del consumo sin estacionalidad
+    - Pronóstico del consumo con estacionalidad
+    - Resultados de las predicciones (error y coeficiente R2)
+    - Pronóstico para nuevos datos
+ - Análisis de la serie temporal con la metodología de Box-Jenkis
+ 
+ Nota: este estudio se ha hecho para las siguientes granularidades:
+ 
+ - Evolución mensual del consumo
+ - Evolución semanal del consumo
+ - Evolución anual del consumo
+ 
+ 
+     
 
 ## Audiencia cliente
 
