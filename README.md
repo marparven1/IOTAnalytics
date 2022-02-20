@@ -26,7 +26,9 @@ Tratamiento de datos en formato horario
 
 #### App shyni
 
-Para lanzar la web, se procederá de la siguiente forma:
+Para lanzar la web, se podrá proceder de dos formas explicadas a continuación
+
+##### Desde GitHub
 
 - Descargar el contenido completo en formato zip desde: https://github.com/marparven1/IOTAnalytics 
 
@@ -40,7 +42,9 @@ Para lanzar la web, se procederá de la siguiente forma:
          - 4.2. Run in terminal: lo mostrará en el terminal dentro de la pantalla de código 
          - 4.3.Run external: salida en una pestaña web
         *  5. Pulsar el botón de Run app en la parte superior derecha del panel de fuente: <img width="101" alt="Captura de pantalla 2022-02-20 a las 13 15 26" src="https://user-images.githubusercontent.com/79573831/154841954-5e17e5b4-7fd1-43c9-a746-32b91979ff4d.png">
-       
+ 
+##### Desde la propia carpeta de proyecto
+   
 - Para una mayor comodidad para el usuario, se ha preparado el contenido para lanzar la página web dentro de la carpeta *Module4_Deep_Analytics*. El contenido se encuentra dentro de una carpeta llamada *IOT_Analytics*, donde encontramos el archivo *app.R*, abrirlo y continuar con el apartado 4 de la explicación inmediatamente anterior.
 
 
