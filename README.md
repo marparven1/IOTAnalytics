@@ -31,7 +31,7 @@ Para lanzar la web, se procederá de la siguiente forma:
      
         - Run in window: Para mostrar el contenido en otra pantalla de Rstudio
         - Run in terminal: lo mostrará en el terminal dentro de la pantalla de código 
-        - Run external: salida a la web
+        - Run external: salida en una pestaña web
         
 
 
