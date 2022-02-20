@@ -56,12 +56,14 @@ Descripción:
 
 ### Visualización del consumo energético
 
+Archivo: 
+
 ### Análisis de series temporales 
 
 
 ## Audiencia cliente
 
-### App shyni
+### App shiny
 
 Para lanzar la web, se podrá proceder de dos formas explicadas a continuación
 
