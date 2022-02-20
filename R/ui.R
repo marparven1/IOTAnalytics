@@ -81,7 +81,9 @@ ui <- fluidPage(
                         #### Consumo ####
                         tabPanel("Gráficas de consumo",
                                     div(
-                                      br(),br()
+                                      br(),br(),
+                                      p("A continuación podemos ver distintos gráficos que muestran el comportamiento de consumo energético
+                                        del cliente.")
                                     ),
                                  hr(),
                                  
@@ -167,7 +169,11 @@ ui <- fluidPage(
                                
                                 sidebarPanel(    
                                   helpText("Nota: Las barras corresponden al consumo energético semanal medio de los años 
-                                       2006-2008, mientras que la línea corresponde al consumo energético semanal del año 2009."))
+                                       2006-2008, mientras que la línea corresponde al consumo energético semanal del año 2009.")),
+                                p("Observamos como el submedidor que ha registrado un mayor consumo energético es el que corresponde 
+                                  al aire acondicionado y termo eléctrico."),
+                                p("Además, para los tres submedidores podemos ver que el consumo en el año 2009 ha sido superior a 
+                                  la media de los últimos años, es decir, en el último año el consumo energético se ha visto incrementado, especialmente se ha registrado un mayor aumento del consumo energético del termo y aire acondicionado.")
                              
                                 ),
                               ),
