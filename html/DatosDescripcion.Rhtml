@@ -10,7 +10,17 @@
 
 <body>
 <FONT SIZE=4>
-<h1>Descripción de los datos</h1>
+<div>
+<h1>Ejemplo real de submedición eléctrica</h1>
+<p>
+A continuación vamos a exponer un ejemplo real de casa submeterizada, donde visualizaremos el consumo energético global y de cada submedidor situado en tres zonas de la casa: cocina, lavadero y otro correspondiente al termo eléctrico y aire acondicionado.
+También expondremos un pronóstico del consumo energético futuro.
+</p>
+<p style=" text-align: center;">
+ <img src="submedicion.png"  style="width:70;height:150px;"> 
+ </p>
+</div>
+<h2>Descripción de los datos</h2>
 <div>
 <p>Nuestros datos contienen información sobre mediciones de energía de una casa en Sceaux (7km of Paris, France) 
 en los meses de Diciembre de 2006 a Noviembre de 2010 (47 meses). Contiene un total de 2075259 medidas en 10 
@@ -42,7 +52,7 @@ variables que explicaremos a continuación.</p>
 -->
       
 <div class="panel-group transparent-panel-group" >
-
+<h2>Variables</h2>
 <div class="w3-row w3-container row app-links">
 
 
@@ -73,72 +83,47 @@ variables que explicaremos a continuación.</p>
 <div class="w3-col s6  w3-center">
     <img   src="182-power.png" alt="Tres">
     <h2>Global Active Power</h2>
-    <p>Potencia activa media global por minuto en el hogar. Es la potencia “útil”, la que consumen los equípos eléctricos
+    <p>Energía total consumida por los equipos eléctricos.
     </br> (Vatios-hora)
     </p>
   </div>
   
   <div class="w3-col s6  w3-center">
-    <img   src="184-power-cord.png" alt="Tres">
-    <h2>Global Reactive Power</h2>
-    <p>Potencia reactiva media global por minuto en el hogar </br> (Vatios-hora) </p>
-  </div>
-  
-</div>
-
-  </br>
-
-<div class="w3-row w3-container row app-links">
-
- <div class="w3-col s6  w3-center">
-    <img   src="156-stats-dots.png" alt="Tres">
-    <h2>Global intensity</h2>
-    <p >Intensidad media de corriente por minuto en el hogar </br> (Amperios)</p>
-  </div>
-  
-  </br>
-  
-   <div class="w3-col s6  w3-center">
     <img   src="271-blocked.png" alt="Tres">
     <h2>Energía no submeterizada</h2>
-    <p>Potencia activa no submeterizada por minuto en el hogar </br> (vatios-hora)</p>
+    <p>Se trata de la energía consumida correspondiente a la parte de la casa no submeterizada. </br> (vatios-hora)</p>
   </div>
+  
 </div>
 
-  </br>
+</br>
 
 <div class="w3-row w3-container row app-links">
 <h1 class="w3-center">Submedición eléctrica</h1>
   </br>
 <div class="w3-col s4  w3-center">
     <img   src="168-meter2.png" alt="Tres">
-    <h2>Submetering 1</h2>
-    <p>Energía registrada por el submedidor 1 en la cocina (lavavajillas, horno y microondas) </br>  (Wh de energía activa)</p>
+    <h2>Cocina</h2>
+    <p>Energía registrada por el submedidor 1 situado en la cocina</br> 
+    (Wh de energía activa)</p>
      <p>Lavavajillas, horno microondas (no placas de inducción)</p>
   </div>
   
   <div class="w3-col s4  w3-center">
     <img   src="167-meter.png" alt="Tres">
-    <h2>Submetering 2</h2>
-    <p>Energía registrada por el submedidor 2 en el lavadero </br> (Wh de energía activa)</p>
+    <h2>Lavadero</h2>
+    <p>Energía registrada por el submedidor 2 situado en el lavadero </br> (Wh de energía activa)</p>
      <p>Lavadora, secadora, frigorífico y luz</p>
   </div>
   
   <div class="w3-col s4  w3-center">
     <img   src="168-meter2.png" alt="Tres">
-    <h2>Submetering 3</h2>
-    <p>Energía registrada por el submedidor 3.</br> (Wh de energía activa)</p>
+    <h2>Aire acondicionado y termo eléctrico</h2>
+    <p>Energía registrada por el submedidor 3</br> (Wh de energía activa)</p>
      <p>Aire acondicionado y termo eléctrico</p>
   </div>
 </div>
-
-
-
-
-
 </div>
-
-
 </font>
 </body>
 </html>

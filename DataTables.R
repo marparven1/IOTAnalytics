@@ -1,0 +1,38 @@
+#,
+#  tabPanel("Granularidad meses",
+#           tags$style(".fa-database {color:#E87722}"),
+#           h3(p(em("Dataset con granularidad de meses "),icon("database",lib = "font-awesome"),style="color:black;text-align:center")),
+#           fluidRow(column(DT::dataTableOutput("Meses"),
+#                           width = 12)),
+#           hr(),
+#           p(em("Dataset con granularidad mensual"),style="text-align:center; font-family: times"),
+#           includeHTML("html/footer.html")
+#  ),
+#  tabPanel("Granularidad diaria",
+#           tags$style(".fa-database {color:#E87722}"),
+#           h3(p(em("Dataset con granularidad diaria"),icon("database",lib = "font-awesome"),style="color:black;text-align:center")),
+#           fluidRow(column(DT::dataTableOutput("Dias"),
+#                           width = 12)),
+#           hr(),
+#           p(em("Dataset con granularidad diaria"),style="text-align:center; font-family: times"),
+#           includeHTML("html/footer.html")
+#  ),
+#  tabPanel("Granularidad horas",
+#           tags$style(".fa-database {color:#E87722}"),
+#           h3(p(em("Dataset con granularidad de horas "),icon("database",lib = "font-awesome"),style="color:black;text-align:center")),
+#           fluidRow(column(DT::dataTableOutput("Horas"),
+#                           width = 12)),
+#           hr(),
+#           p(em("Dataset con granularidad de horas"),style="text-align:center; font-family: times"),
+#           includeHTML("html/footer.html")
+#  ),
+#  
+#  tabPanel("Granularidad minutos",
+#           tags$style(".fa-database {color:#E87722}"),
+#           h3(p(em("Dataset con granularidad de minutos "),icon("database",lib = "font-awesome"),style="color:black;text-align:center")),
+#           fluidRow(column(DT::dataTableOutput("Minutos"),
+#                           width = 12)),
+#           hr(),
+#           p(em("Dataset con granularidad de minutos"),style="text-align:center; font-family: times"),
+#           includeHTML("html/footer.html")
+#  )
