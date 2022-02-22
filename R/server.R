@@ -1202,4 +1202,68 @@ output$PieUnAno <- renderPlotly({
 
 
 
+
+
+### Pronostico ####
+
+
+
+# output$PronosticoMensual
+
+
+# output$PronosticoMensual
+
+
+
+dfPlotly <- reactive({
+  
+  dfPlotlyPronosticoMensual
+  
+})
+
+
+output$PronosticoMensual <- renderPlotly({
+  dfPlotly<-dfPlotly()
+  plot_ly(dfPlotly,
+          x = ~Fecha, 
+          y = ~Cocina,
+          name = "Cocina" , type='scatter',  mode='lines'  ) %>% 
+    add_trace( y = ~dfPlotly$Lavadero,name = "Lavadero" , mode='lines')%>%
+    add_trace( y = ~dfPlotly$AireTermo, name = "Aire acondicionado y termo" , mode='lines') %>%
+    layout(title = "Pronóstico del consumo energético de la cocina para el año 2011",
+           xaxis = list(title = "Mes",
+                        ticktext = c("Dec 2010"	,"Jan 2011"	,"Feb 2011"	,"Mar 2011"	,"Apr 2011"	 ,"May 2011"	,"Jun 2011"	,"Jul 2011"	,"Aug 2011"	,"Sep 2011","Oct 2011","Nov 2011","Dec # 2011"), tickvals = dfPlotly$Fecha)
+           , yaxis = list (title = "Energía (Varios-hora)"))
+})
+
+
+
+
+dfPlotlyAgosto <- reactive({
+  
+  dfPlotlyPronosticoAgosto
+  
+})
+
+
+output$PronosticoEnero <- renderPlotly({
+  
+  dfPlotlyPronosticoAgosto<-dfPlotlyAgosto()
+  plot_ly(dfPlotlyPronosticoAgosto,
+          x = ~dfPlotlyPronosticoAgosto$Fecha, 
+          y = ~dfPlotlyPronosticoAgosto$Cocina,
+          name = "Cocina" , type='scatter',  mode='lines'  ) %>% 
+    add_trace( y = ~dfPlotlyPronosticoAgosto$Lavadero,name = "Lavadero" , mode='lines')%>%
+    add_trace( y = ~dfPlotlyPronosticoAgosto$AireTermo, name = "Aire acondicionado y termo" , mode='lines') %>%
+    layout(title = "Pronóstico del consumo energético para Agosto del año 2011",
+           xaxis = list(title = "Mes", ticktext = paste(1:31,"Ago"), tickvals = dfPlotlyPronosticoAgosto$Fecha)
+           , yaxis = list (title = "Energía (Varios-hora)"))
+})
+
+
+
+
+
+
+
 }

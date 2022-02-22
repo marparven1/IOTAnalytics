@@ -17,6 +17,9 @@ load(file="data/DF_Energia_GMinutos.RData")
 load(file="data/DF_Energia_GHoras.RData")
 load(file="data/DF_Energia_GDiaria.RData")
 load(file="data/DF_Energia_GMensual.RData")
+load(file="data/Pronostico/DF_Energia_PronosticoMensual_01.RData")
+load(file="data/Pronostico/DF_Energia_PronosticoAgosto_11.RData")
+
 
 
 # Define UI for app that draws a histogram ----
@@ -308,10 +311,6 @@ ui <- fluidPage(
                                               
                                             ))
                                  ),
-                                 
-                                 
-                            
-                                 
                                  br(),hr(),br(),
                                  includeHTML("html/footer.html")
                                  
@@ -322,69 +321,35 @@ ui <- fluidPage(
            navbarMenu(
             
              "Pronóstico de consumo",
-             tabPanel("Diaria"),
+             tabPanel("Diario",
+                      h1("Pronóstico del consumo energético diario para el mes de Agosto del año 2011"),
+                      fluidRow( 
+                      
+                        column(12,
+                               plotlyOutput("PronosticoEnero",height = "450px",width = "80%")
+                        ),
+                               div(
+                                 p("Se observa que el pronóstico de consumo para el mes de Diciembre es bastante superior al resto de meses"),
+                                style="text-align:justify; margin: auto;")
+                      ),
+                      
+                      br(),hr(),br(),
+                      includeHTML("html/footer.html")
+                      ),
              tabPanel("Mensual",
-                      tabsetPanel(
-                        tabPanel(
-                          "Cocina",
-                          br(),
-                          h1("Evolución mensual del consumo. Años 2007-2010 y predicción para el año 2010"),
-                          br(),
-                          fluidRow(
-                            h2("Visualización de los datos"),
-                            column(9,
-                                 img(src = "PlotMensualCocina.png" , width="100%")
-                            ),
-                            column(3,
-                                   div(
-                                     br(),
-                                     p("
-                                       Podemos apreciar como el consumo energético durante los meses de verano es más bajo"),
-                                     p("Además, la línea discontinua roja muestra la tendencia de consumo energético, que en este caso es creciente a medida que avanza el tiempo."),
-                                     p("En definitiva, la gráfica nos muestra el comportamiento de consumo energético de la cocina. Podemos observar dos picos donde el consumo ha sido
-                                       bastante inferior al resto, en el mes de Junio del año 2008 y el mes de Mayo del año 2009. \n Estos dos valores son valores atípicos,
-                                       son unos valores aislados que podrían influir en el pronóstico del consumo."),
-                                     style="text-align:justify; margin: auto;"
-                                     )  
-                            )
-                          ),
-                          hr(),
-                          fluidRow(
-                            h2("Descomposición de la serie"),
-                            column(7,
-                                   img(src = "PlotMensualDescomposicionCocina.png" , width="100%")),
-                            column(5,
-                                   div(
-                                     br(),
-                                     p("Data: Es el mismo gráfico que tenemos en el apartado visualización"),
-                                     p("Remainder: Ruido. Corresponde a las variaciones irregulares que no se pueden predecir"),
-                                     p("Seasonal: Componente estacional: Podemos ver que hay movimientos que se repiten cada año, es decir,
-                                       que el consumo energético mensual es similar para los mismos meses en distintos años."),
-                                     p("Trend: La tendencia es el conportamiento a largo plazo del consumo. En nuestro caso, la tendencia del consumo crece con los años."),
-                                     style="text-align:justify; margin: auto;"
-                                   ))
-                          ),
-                          hr(),
-                          fluidRow(
-                            h2("Visualización del consumo sin estacionalidad"),
-                            column(12,
-                                   h3("Serie sin estacionalidad"),
-                                   img(src = "PlotMCocinaSinEstac.png" , width="100%", height=400)
-                                   )
-                            
-                          ),
-                          hr(),
+                          h1("Pronóstico del consumo energético mensual para el año 2011"),
+                         
                           fluidRow( 
-                            h2("Pronóstico del consumo energético para el año 2010"),
+                            h2("Pronóstico del consumo energético"),
+                            h3("Diciembre del año 2011 y año 2011"),
                             br(),
-                            column(5,
-                                   img(src = "PredConsMenCoc.png" , width="100%")
+                            column(10,
+                                   plotlyOutput("PronosticoMensual",height = "450px",width = "80%")
                                    ),
-                            column(5,
-                                   img(src = "PredConsMensCoc2.png" , width="100%")
-                                   ),
-                            column(2,
+                            
+                            column(4,
                                   div(
+                                    p("Se observa que el pronóstico de consumo para el mes de Diciembre es bastante superior al resto de meses"),
                                    p("Observamos como el pronóstico del consumo energético
                                      para el período comprendido entre los meses Mayo-Junio es bastante inferior al resto
                                      en ambos casos."),
@@ -396,22 +361,10 @@ ui <- fluidPage(
                         
                           br(),hr(),br(),
                           includeHTML("html/footer.html")
-                        ),
-                        tabPanel(
-                          "Lavadero"
-                        ),
-                        tabPanel(
-                          "Termo eléctrico y aire acondicionado"
-                        )
-                      ),
-                      
-                      
              ),
              tabPanel("Semanal")
              )
              
-           
-  
 )
 )
 
