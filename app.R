@@ -17,6 +17,8 @@ load(file="data/DF_Energia_GDiaria.RData")
 load(file="data/DF_Energia_GMensual.RData")
 load(file="data/Pronostico/DF_Energia_PronosticoMensual_01.RData")
 load(file="data/Pronostico/DF_Energia_PronosticoAgosto_11.RData")
+load(file="data/Pronostico/DF_Energia_PronosticoEnero_11.RData")
+load(file="data/Pronostico/DF_Energia_PronosticoSemanal_11_Medio.RData")
 
 
 source("R/ui.R")
